@@ -1,12 +1,18 @@
+import { useState } from "react";
 import { Gift, Sparkles, Trophy } from "lucide-react";
 import type { GamificationStats } from "../utils/gamification";
+import { Modal } from "./Modal";
 
 type GamificationPanelProps = {
   stats: GamificationStats;
 };
 
 export function GamificationPanel({ stats }: GamificationPanelProps) {
+  const [showAllBadges, setShowAllBadges] = useState(false);
   const unlockedCount = stats.badges.filter((badge) => badge.unlocked).length;
+
+  // Show first 4 badges on the main strip
+  const previewBadges = stats.badges.slice(0, 4);
 
   return (
     <section className="game-panel" aria-label="Progress gamifikasi">
@@ -23,7 +29,14 @@ export function GamificationPanel({ stats }: GamificationPanelProps) {
             <span style={{ width: `${stats.xpProgress}%` }} />
           </div>
         </div>
-        <div className="reward-chest" aria-hidden="true">{"\u{1F381}"}</div>
+        <button
+          className="reward-chest-btn"
+          type="button"
+          aria-label="Buka peti hadiah level"
+          onClick={() => alert("🎁 Kiko: Terus catat pengeluaranmu secara rutin! Peti kejutan hemat ini akan terbuka otomatis saat kamu mencapai Level 5!")}
+        >
+          {"\u{1F381}"}
+        </button>
       </div>
 
       <div className="mission-card">
@@ -51,10 +64,17 @@ export function GamificationPanel({ stats }: GamificationPanelProps) {
       <div className="badge-strip">
         <div className="section-heading">
           <h2>Badge saya</h2>
-          <button className="inline-link" type="button" aria-label="Lihat semua badge">Lihat semua</button>
+          <button
+            className="inline-link"
+            type="button"
+            aria-label="Lihat semua badge pencapaian"
+            onClick={() => setShowAllBadges(true)}
+          >
+            Lihat semua
+          </button>
         </div>
         <div className="badge-row" aria-label={`Badge pencapaian ${unlockedCount} dari ${stats.badges.length}`}>
-          {stats.badges.map((badge) => (
+          {previewBadges.map((badge) => (
             <article className={`badge-card ${badge.unlocked ? "unlocked" : ""}`} key={badge.id}>
               <span>{badge.icon}</span>
               <strong>{badge.title}</strong>
@@ -63,6 +83,28 @@ export function GamificationPanel({ stats }: GamificationPanelProps) {
           ))}
         </div>
       </div>
+
+      <Modal title="Badge Pencapaian" open={showAllBadges} onClose={() => setShowAllBadges(false)}>
+        <div className="modal-scroll-area">
+          <p className="modal-description-text">
+            Kamu telah membuka <strong>{unlockedCount} dari {stats.badges.length}</strong> badge. Terus catat transaksi dan jaga uang saku agar koin berlimpah!
+          </p>
+          <div className="badges-modal-list">
+            {stats.badges.map((badge) => (
+              <article className={`badge-detail-card ${badge.unlocked ? "unlocked" : "locked"}`} key={badge.id}>
+                <span className="badge-detail-icon" aria-hidden="true">{badge.icon}</span>
+                <div className="badge-detail-info">
+                  <h3>{badge.title}</h3>
+                  <p>{badge.description}</p>
+                  <span className={`badge-status-pill ${badge.unlocked ? "unlocked" : "locked"}`}>
+                    {badge.unlocked ? "✓ Terbuka" : "🔒 Terkunci"}
+                  </span>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </Modal>
     </section>
   );
 }

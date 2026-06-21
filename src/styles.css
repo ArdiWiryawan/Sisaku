@@ -3133,3 +3133,181 @@ body {
   background: rgba(59, 130, 246, 0.15);
   color: #93c5fd;
 }
+
+/* UI/UX Dark Mode overrides for SisaKu */
+.dark-theme .quick-add-card {
+  background: #1e293b;
+  border-color: #334155;
+  box-shadow: var(--shadow-card);
+}
+
+.dark-theme .inline-link {
+  background: #334155;
+  color: #fbbf24;
+}
+
+.dark-theme .inline-link:hover {
+  background: #475569;
+}
+
+.dark-theme .summary-strip span,
+.dark-theme .detail-metrics span,
+.dark-theme .insight-grid span,
+.dark-theme .pocket-values span {
+  color: #94a3b8;
+}
+
+/* Gamification & Badges Details UI */
+.reward-chest-btn {
+  border: 0;
+  background: transparent;
+  font-size: 1.8rem;
+  padding: 0;
+  cursor: pointer;
+  line-height: 1;
+  transition: transform var(--transition-bounce);
+}
+
+.reward-chest-btn:hover {
+  transform: scale(1.2) rotate(8deg);
+}
+
+.modal-scroll-area {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 6px;
+  margin-top: 4px;
+}
+
+/* Customize scrollbar for modal list */
+.modal-scroll-area::-webkit-scrollbar {
+  width: 6px;
+}
+.modal-scroll-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+.modal-scroll-area::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 99px;
+}
+.dark-theme .modal-scroll-area::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.modal-description-text {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  margin-bottom: 16px;
+  line-height: 1.45;
+}
+
+.badges-modal-list {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.badge-detail-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  border-radius: 20px;
+  background: #fdfbf7;
+  border: 1px solid rgba(239, 228, 204, 0.8);
+  transition: transform var(--transition-bounce), box-shadow 0.2s ease;
+}
+
+.badge-detail-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(123, 116, 104, 0.08);
+}
+
+.badge-detail-icon {
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  background: #f5f0e5;
+  border-radius: 16px;
+  flex-shrink: 0;
+}
+
+.badge-detail-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+}
+
+.badge-detail-info h3 {
+  font-size: 0.95rem;
+  margin: 0;
+  color: #24170f;
+  font-weight: 800;
+}
+
+.badge-detail-info p {
+  font-size: 0.8rem;
+  margin: 0;
+  color: #7b7468;
+  line-height: 1.35;
+  text-align: left;
+}
+
+.badge-status-pill {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-top: 2px;
+}
+
+.badge-status-pill.unlocked {
+  background: #eef8e9;
+  color: #1e700a;
+}
+
+.badge-status-pill.locked {
+  background: #f1f1f1;
+  color: #666666;
+}
+
+/* Dark Mode equivalents for Badges List Modal */
+.dark-theme .badge-detail-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.dark-theme .badge-detail-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.dark-theme .badge-detail-icon {
+  background: #334155;
+}
+
+.dark-theme .badge-detail-info h3 {
+  color: #f8fafc;
+}
+
+.dark-theme .badge-detail-info p {
+  color: #94a3b8;
+}
+
+.dark-theme .badge-status-pill.unlocked {
+  background: rgba(16, 185, 129, 0.18);
+  color: #34d399;
+}
+
+.dark-theme .badge-status-pill.locked {
+  background: #334155;
+  color: #94a3b8;
+}
+
+

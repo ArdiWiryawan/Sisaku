@@ -16,6 +16,7 @@ type HomePageProps = {
   activePocket: Pocket | null;
   expenses: Expense[];
   categories: Category[];
+  pockets: Pocket[];
   quickAddTemplates: QuickAddTemplate[];
   onAddExpense: () => void;
   onCreatePocket: () => void;
@@ -24,7 +25,7 @@ type HomePageProps = {
   onDeleteExpense: (expense: Expense) => void;
 };
 
-export function HomePage({ activePocket, expenses, categories, quickAddTemplates, onAddExpense, onCreatePocket, onQuickAdd, onEditExpense, onDeleteExpense }: HomePageProps) {
+export function HomePage({ activePocket, expenses, categories, pockets, quickAddTemplates, onAddExpense, onCreatePocket, onQuickAdd, onEditExpense, onDeleteExpense }: HomePageProps) {
   if (!activePocket) {
     return (
       <div className="page narrow-page">
@@ -42,7 +43,8 @@ export function HomePage({ activePocket, expenses, categories, quickAddTemplates
   const summary = calculatePocketSummary(activePocket, expenses);
   const categoryById = new Map(categories.map((category) => [category.id, category.name]));
   const recentExpenses = [...activeExpenses].sort((a, b) => `${b.date}${b.createdAt}`.localeCompare(`${a.date}${a.createdAt}`)).slice(0, 5);
-  const gameStats = getGamificationStats(activeExpenses, categories, summary);
+  const gameStats = getGamificationStats(expenses.filter(e => !e.deletedAt), categories, summary, pockets, activePocket);
+
 
   return (
     <div className="page dashboard-page">

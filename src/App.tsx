@@ -13,6 +13,8 @@ import { SettingsPage } from "./pages/SettingsPage";
 import type { AppTab, Expense, ExpenseInput, Pocket, PocketInput, QuickAddTemplate } from "./types";
 import { buildExpenseCSV, downloadCSV } from "./utils/csv";
 import { getTodayISO } from "./utils/date";
+import { calculatePocketSummary } from "./utils/budgeting";
+import { getGamificationStats } from "./utils/gamification";
 
 type ExpenseModalState =
   | {
@@ -92,8 +94,34 @@ export default function App() {
       store.updateExpense(expenseModal.expense.id, input);
       setToast("Pengeluaran diperbarui. Batas aman sudah dihitung ulang.");
     } else {
-      store.createExpense(input);
-      setToast("Tercatat. Batas aman harianmu sudah diperbarui.");
+      const activeExpensesBefore = store.expenses.filter((e) => !e.deletedAt);
+      const summaryBefore = store.activePocket ? calculatePocketSummary(store.activePocket, store.expenses) : null;
+      const oldStats = summaryBefore 
+        ? getGamificationStats(activeExpensesBefore, store.categories, summaryBefore, store.pockets, store.activePocket)
+        : null;
+
+      const newExpense = store.createExpense(input);
+
+      if (oldStats && store.activePocket) {
+        const nextExpenses = [...store.expenses, newExpense].filter((e) => !e.deletedAt);
+        const summaryAfter = calculatePocketSummary(store.activePocket, nextExpenses);
+        const newStats = getGamificationStats(nextExpenses, store.categories, summaryAfter, store.pockets, store.activePocket);
+
+        if (newStats.level > oldStats.level) {
+          setToast(`🎉 LEVEL UP! Kamu naik ke Level ${newStats.level}!`);
+        } else {
+          // Check if any badge was newly unlocked
+          const oldUnlockedIds = new Set(oldStats.badges.filter(b => b.unlocked).map(b => b.id));
+          const newUnlocked = newStats.badges.filter(b => b.unlocked && !oldUnlockedIds.has(b.id));
+          if (newUnlocked.length > 0) {
+            setToast(`🏆 BADGE BARU! Kamu membuka badge: ${newUnlocked[0].title}!`);
+          } else {
+            setToast("Tercatat. Batas aman harianmu sudah diperbarui.");
+          }
+        }
+      } else {
+        setToast("Tercatat. Batas aman harianmu sudah diperbarui.");
+      }
     }
 
     setExpenseModal(null);
@@ -155,6 +183,7 @@ export default function App() {
           activePocket={store.activePocket}
           expenses={store.expenses}
           categories={store.categories}
+          pockets={store.pockets}
           quickAddTemplates={store.quickAddTemplates}
           onAddExpense={() => setExpenseModal({ mode: "create", preset: null })}
           onCreatePocket={() => setShowCreatePocket(true)}
