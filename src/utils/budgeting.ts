@@ -28,15 +28,15 @@ export function getBudgetStatus(summary: Pick<PocketSummary, "remainingMoney" | 
 
 export function getStatusMessage(status: BudgetStatus): string {
   if (status === "Aman") {
-    return "Masih aman. Ritmemu bagus.";
+    return "Uang saku aman! Jaga pola hematmu.";
   }
 
   if (status === "Waspada") {
-    return "Mulai mepet. Pilih yang penting dulu.";
+    return "Batas aman mepet. Belanja seperlunya.";
   }
 
   if (status === "Bahaya") {
-    return "Uang menipis. Fokus ke kebutuhan utama.";
+    return "Uang saku kritis! Hemat dulu ya.";
   }
 
   return "Selesai. Saatnya mulai pocket baru.";

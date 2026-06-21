@@ -155,7 +155,7 @@ export function HomePage({
             </div>
             <div className="mission-tracker-content">
               <div className="mission-tracker-info">
-                <div>
+                <div className="mission-tracker-text">
                   <h3>
                     {summary.status === "Aman" ? "Jangan jajan di luar" : "Misi penyelamatan"}
                   </h3>

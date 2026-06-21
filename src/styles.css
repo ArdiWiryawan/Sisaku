@@ -2341,7 +2341,7 @@ body {
 
   .safe-card {
     padding: 18px;
-    margin-bottom: 108px;
+    margin-bottom: 28px;
   }
 
   .safe-label {
@@ -2472,10 +2472,9 @@ body {
 }
 
 .safe-status-chip span {
-  max-width: 23ch;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  max-width: none;
+  overflow: visible;
+  white-space: normal;
 }
 
 .safe-mascot-wrap {
@@ -2692,7 +2691,7 @@ body {
   }
 
   .safe-card {
-    margin-bottom: 152px;
+    margin-bottom: 28px;
     border-radius: 30px;
   }
 
@@ -2701,7 +2700,7 @@ body {
   }
 
   .safe-status-chip span {
-    max-width: 19ch;
+    max-width: none;
   }
 
   .safe-card-footer {
@@ -3316,7 +3315,7 @@ body {
     display: none !important;
   }
   .page {
-    padding-top: 24px !important;
+    padding: 24px 16px 120px !important;
   }
   .desktop-only-header {
     display: none !important;
@@ -3490,6 +3489,7 @@ body {
 
 /* Mission Tracker Card */
 .mission-tracker-card {
+  padding: 20px !important;
   border-radius: 24px;
   border: 1px solid var(--color-border);
   box-shadow: var(--shadow-card);
@@ -3499,6 +3499,11 @@ body {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+.mission-tracker-text {
+  min-width: 0;
+  flex: 1;
 }
 
 .mission-tracker-info {

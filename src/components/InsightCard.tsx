@@ -34,7 +34,7 @@ export function InsightCard({ expenses, categories, summary }: InsightCardProps)
       <div className="card-header-row">
         <div>
           <p className="eyebrow">Pantauan Kiko</p>
-          <h2>Ritme uangmu</h2>
+          <h2>Pola belanjamu</h2>
         </div>
         <div className="icon-bubble primary">
           <Lightbulb size={20} aria-hidden="true" />

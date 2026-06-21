@@ -57,9 +57,9 @@ export function formatDateLabel(dateISO: string, todayISO = getTodayISO()): stri
 export function isDateInThisWeek(dateISO: string, todayISO = getTodayISO()): boolean {
   const date = toLocalDate(dateISO);
   const today = toLocalDate(todayISO);
-  const mondayOffset = (today.getDay() + 6) % 7;
+  const sundayOffset = today.getDay(); // Sunday is 0, Monday is 1, etc.
   const start = new Date(today);
-  start.setDate(today.getDate() - mondayOffset);
+  start.setDate(today.getDate() - sundayOffset);
   start.setHours(0, 0, 0, 0);
   const end = new Date(start);
   end.setDate(start.getDate() + 6);
