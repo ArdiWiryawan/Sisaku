@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="SisaKu">
+  <defs>
+    <linearGradient id="bg" x1="92" y1="34" x2="426" y2="478" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF2A6"/>
+      <stop offset="0.52" stop-color="#FFD23A"/>
+      <stop offset="1" stop-color="#FFB01B"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="169" y1="356" x2="349" y2="423" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2F6DF6"/>
+      <stop offset="1" stop-color="#204ECF"/>
+    </linearGradient>
+    <filter id="shadow" x="44" y="46" width="424" height="424" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="22" stdDeviation="22" flood-color="#9A5C00" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="120" fill="url(#bg)"/>
+  <path d="M84 96c86-39 239-38 345 8" fill="none" stroke="#FFFFFF" stroke-opacity="0.38" stroke-width="18" stroke-linecap="round"/>
+  <g filter="url(#shadow)">
+    <path d="M318 109c-38-21-101-16-134 16-33 31-29 75 10 95 31 17 78 16 104 31 26 15 24 47-4 61-30 15-91 8-128-25" fill="none" stroke="#351A05" stroke-width="56" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M318 109c-38-21-101-16-134 16-33 31-29 75 10 95 31 17 78 16 104 31 26 15 24 47-4 61-30 15-91 8-128-25" fill="none" stroke="#FFF8D7" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="348" cy="152" r="45" fill="#FFF8D7"/>
+    <circle cx="348" cy="152" r="31" fill="#FFCF24" stroke="#D98600" stroke-width="9"/>
+    <path d="M348 132v40M330 152h36" stroke="#9A5C00" stroke-width="10" stroke-linecap="round"/>
+    <path d="M168 367c41 30 102 39 164 17" fill="none" stroke="url(#blue)" stroke-width="42" stroke-linecap="round"/>
+    <circle cx="166" cy="308" r="20" fill="#42C653" stroke="#FFF8D7" stroke-width="10"/>
+  </g>
+</svg>
