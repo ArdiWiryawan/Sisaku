@@ -231,7 +231,7 @@ export function getGamificationStats(
     },
   ];
 
-  const dailyLimit = Math.max(summary.safePerDay + summary.spentToday, summary.initialSafePerDay);
+  const dailyLimit = Math.max(summary.todayAllowance, summary.initialSafePerDay);
   const missionProgress = dailyLimit > 0 ? Math.min(100, Math.round((Math.max(dailyLimit - summary.spentToday, 0) / dailyLimit) * 100)) : 0;
 
   return {

@@ -65,6 +65,7 @@ export type PocketSummary = {
   spentToday: number;
   remainingMoney: number;
   initialSafePerDay: number;
+  todayAllowance: number;
   safePerDay: number;
   moneyUsedPercent: number;
   timeElapsedPercent: number;

@@ -6,7 +6,7 @@ function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
 }
 
-export function getBudgetStatus(summary: Pick<PocketSummary, "remainingMoney" | "remainingDays" | "safePerDay" | "initialSafePerDay" | "paceDifference">): BudgetStatus {
+export function getBudgetStatus(summary: Pick<PocketSummary, "remainingMoney" | "remainingDays" | "todayAllowance" | "initialSafePerDay" | "paceDifference">): BudgetStatus {
   if (summary.remainingMoney <= 0) {
     return "Bahaya";
   }
@@ -15,11 +15,11 @@ export function getBudgetStatus(summary: Pick<PocketSummary, "remainingMoney" | 
     return "Selesai";
   }
 
-  if (summary.safePerDay < summary.initialSafePerDay * 0.5 || summary.paceDifference > 25) {
+  if (summary.todayAllowance < summary.initialSafePerDay * 0.5 || summary.paceDifference > 25) {
     return "Bahaya";
   }
 
-  if (summary.safePerDay < summary.initialSafePerDay * 0.8 || summary.paceDifference > 10) {
+  if (summary.todayAllowance < summary.initialSafePerDay * 0.8 || summary.paceDifference > 10) {
     return "Waspada";
   }
 
@@ -75,8 +75,8 @@ function getRecoveryMessage(summary: Omit<PocketSummary, "status" | "statusMessa
     return `Hari ini lewat ${formatRupiah(dailyOverspend)}. Masih bisa aman kalau ${futureDays} hari ke depan jaga di bawah ${formatRupiah(futureSafePerDay)}/hari.`;
   }
 
-  if (summary.safePerDay < summary.initialSafePerDay * 0.8 || summary.paceDifference > 10) {
-    return `Mulai mepet. Coba jaga pengeluaran di bawah ${formatRupiah(summary.safePerDay)}/hari untuk sisa periode.`;
+  if (summary.todayAllowance < summary.initialSafePerDay * 0.8 || summary.paceDifference > 10) {
+    return `Mulai mepet. Coba jaga pengeluaran di bawah ${formatRupiah(summary.todayAllowance)}/hari untuk sisa periode.`;
   }
 
   return null;
@@ -96,7 +96,11 @@ export function calculatePocketSummary(pocket: Pocket, expenses: Expense[], toda
   const spentToday = pocketExpenses.filter((expense) => expense.date === todayISO).reduce((sum, expense) => sum + expense.amount, 0);
   const remainingMoney = pocket.totalBudget - totalSpent;
   const initialSafePerDay = pocket.totalBudget / totalDays;
-  const safePerDay = remainingDays > 0 ? remainingMoney / remainingDays : 0;
+
+  // New Safe-to-Spend Today Logic
+  const todayAllowance = remainingDays > 0 ? (remainingMoney + spentToday) / remainingDays : 0;
+  const safePerDay = remainingDays > 0 ? todayAllowance - spentToday : remainingMoney;
+
   const moneyUsedPercent = pocket.totalBudget > 0 ? clamp((totalSpent / pocket.totalBudget) * 100, 0, 999) : 0;
   const timeElapsedPercent = totalDays > 0 ? clamp((elapsedDays / totalDays) * 100, 0, 100) : 0;
   const paceDifference = moneyUsedPercent - timeElapsedPercent;
@@ -109,6 +113,7 @@ export function calculatePocketSummary(pocket: Pocket, expenses: Expense[], toda
     spentToday,
     remainingMoney,
     initialSafePerDay,
+    todayAllowance,
     safePerDay,
     moneyUsedPercent,
     timeElapsedPercent,

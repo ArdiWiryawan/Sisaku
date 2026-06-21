@@ -45,6 +45,16 @@ describe("calculatePocketSummary", () => {
     expect(summary.remainingMoney).toBe(240000);
     expect(summary.remainingDays).toBe(6);
     expect(summary.safePerDay).toBe(40000);
+    expect(summary.todayAllowance).toBe(40000);
+  });
+
+  it("decreases safePerDay when spending today while keeping todayAllowance constant", () => {
+    const summary = calculatePocketSummary(pocket, [expense(18000, "2026-06-21")], "2026-06-21");
+
+    expect(summary.remainingMoney).toBe(282000);
+    expect(summary.remainingDays).toBe(7);
+    expect(Math.round(summary.todayAllowance)).toBe(42857);
+    expect(Math.round(summary.safePerDay)).toBe(24857);
   });
 
   it("marks budget as dangerous when remaining money is gone", () => {
