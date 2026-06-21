@@ -1,74 +1,80 @@
-# SisaKu
+# 🪙 SisaKu — PWA Budgeting Harian Mahasiswa
 
-SisaKu adalah PWA budgeting harian untuk mahasiswa dan anak muda. Fokus utamanya bukan mencatat uang habis ke mana, tetapi menjawab:
+> **"Hari ini aman pakai berapa supaya uang saku cukup sampai hari terakhir?"**
 
-```text
-Hari ini aman pakai berapa supaya uangku cukup sampai hari terakhir?
-```
+SisaKu adalah aplikasi Progressive Web App (PWA) budgeting harian local-first yang dirancang khusus untuk mahasiswa dan anak muda. Berbeda dengan aplikasi keuangan biasa yang hanya mencatat kemana uang pergi, SisaKu berfokus pada **tindakan preventif** dengan memberitahu pengguna batas aman belanja mereka setiap hari secara dinamis.
 
-## Ringkasan Produk
+---
 
-- **Goal:** user membuat budget berdasarkan uang dan durasi, lalu melihat batas aman pengeluaran harian.
-- **Core flow:** buat pocket, lihat angka aman harian, catat pengeluaran cepat, cek status Aman/Waspada/Bahaya, lihat recovery message jika mulai mepet.
-- **Data model:** `Pocket`, `Expense`, `Category`, `QuickAddTemplate`, dan `AppSettings` disimpan local-first di `localStorage`.
-- **Budget logic:** `remainingMoney = totalBudget - totalSpent`, `remainingDays = endDate - today + 1`, `safePerDay = remainingMoney / remainingDays`.
-- **PWA:** manifest, icon 192/512/maskable, service worker app-shell caching, standalone display, install guidance.
-- **UX:** Bahasa Indonesia, suportif, ringan, tanpa copy yang menghakimi.
+## ✨ Fitur Utama
 
-## Fitur MVP
+- 🎯 **Daily Safe-to-Spend (Batas Aman Harian):** Angka aman belanja hari ini dihitung dinamis setiap kali Anda mencatat transaksi (`Sisa Uang / Sisa Hari`).
+- 🎨 **Visual Premium & Taktil:** Antarmuka modern berkonsep *glassmorphic*, gradasi warna yang menenangkan, serta transisi interaktif yang responsif dan memuaskan.
+- 🦊 **Kiko, Asisten Keuanganmu:** Maskot suportif yang memberikan rekomendasi finansial tanpa kesan menghakimi (*no shame, only recovery*).
+- 🏆 **Gamifikasi XP & Misi Harian:** Dapatkan XP dan buka lencana (*badges*) hemat dengan menjaga disiplin keuangan dan menyelesaikan tantangan harian.
+- ⚡ **Tap Catat Cepat (Quick Add):** Template transaksi rutin sekali ketuk (Makan, Kopi, Transportasi, Print, dan Laundry).
+- 🔐 **Local-First & Privasi Penuh:** Berjalan 100% offline, seluruh data disimpan di browser Anda (`localStorage`). Tanpa login, tanpa bank-sync, tanpa iklan.
+- 📥 **Ekspor CSV:** Ekspor seluruh data transaksi Anda ke file CSV kapan saja untuk cadangan atau analisis manual.
 
-- Onboarding dan pembuatan pocket pertama.
-- Multiple budget pocket, detail pocket, set pocket aktif, edit, dan hapus.
-- Dashboard dengan angka `Hari ini aman pakai` sebagai elemen utama.
-- Quick add template: Makan 15K, Kopi 12K, Transport 20K, Print 5K, Laundry 10K.
-- Tambah, edit, hapus, dan filter riwayat pengeluaran.
-- Insight ringan: kategori terbesar, total hari ini, total minggu ini, rekomendasi sederhana.
-- Export CSV dan reset data lokal.
-- Offline-first basic setelah first load production.
+---
 
-## Keputusan Implementasi
+## 🛠️ Teknologi & Desain
 
-- Dokumentasi memakai dua nama field budget: `initialBudget` dan `totalBudget`. Implementasi memakai `totalBudget` sesuai dokumen Data Model.
-- Dokumentasi menyebut kategori sebagai string dan `categoryId`. Implementasi memakai `categoryId` agar data lebih stabil.
-- Reminder masih placeholder sesuai scope MVP, belum memakai native notification.
-- Install prompt otomatis belum dipaksa; halaman Saya memberi panduan Android Chrome dan iOS Safari.
+- **Core:** React 19 + TypeScript + Vite 8
+- **Styling:** Vanilla CSS (Modern CSS variables, flexbox/grid layout, glassmorphic backdrop-filters, custom keyframe spring animations)
+- **Icons:** Lucide React
+- **PWA:** Service worker cache, standalone display mode, offline-first support.
+- **Typography:** *Plus Jakarta Sans* (Heading & Angka) & *Inter* (Body Text) via Google Fonts.
 
-## Menjalankan Lokal
+---
 
-```bash
-npm install
-npm run dev
-```
+## 📈 Logika Budgeting SisaKu
 
-Build production:
+Aplikasi menghitung batas aman Anda menggunakan rumus sederhana namun sangat efektif:
 
-```bash
-npm run build
-npm run preview
-```
+$$\text{Sisa Uang} = \text{Total Budget} - \text{Total Pengeluaran}$$
+$$\text{Sisa Hari} = \text{Tanggal Akhir} - \text{Hari Ini} + 1$$
+$$\text{Batas Aman Per Hari} = \frac{\text{Sisa Uang}}{\text{Sisa Hari}}$$
 
-Test logic:
+Jika Anda belanja melebihi batas hari ini, sistem akan menghitung ulang rekomendasi harian baru secara otomatis (*recovery plan*):
+> *"Hari ini lewat Rp12.000. Masih bisa aman kalau 3 hari ke depan jaga pengeluaran di bawah Rp35.000/hari."*
 
-```bash
-npm run test
-```
+---
 
-## Publish
+## 🚀 Menjalankan Secara Lokal
 
-Build output ada di:
+Pastikan Anda memiliki [Node.js](https://nodejs.org/) terinstal di komputer Anda.
 
-```text
-dist/
-```
+1. **Clone repositori:**
+   ```bash
+   git clone https://github.com/ArdiWiryawan/Sisaku.git
+   cd Sisaku
+   ```
 
-Deploy ke Vercel, Netlify, atau Cloudflare Pages dengan command build:
+2. **Instal dependensi:**
+   ```bash
+   npm install
+   ```
 
-```bash
-npm run build
-```
+3. **Jalankan server pengembangan:**
+   ```bash
+   npm run dev
+   ```
+   Buka `http://localhost:5173` di browser Anda.
 
-Pastikan deployment berjalan di HTTPS agar PWA install dan service worker aktif dengan benar.
+4. **Jalankan uji logika (Vitest):**
+   ```bash
+   npm run test
+   ```
 
-## Catatan Privasi
+5. **Build produksi:**
+   ```bash
+   npm run build
+   npm run preview
+   ```
 
-SisaKu MVP tidak memakai login, backend, bank sync, atau e-wallet sync. Data pengguna tersimpan di perangkat/browser pengguna. Export CSV disediakan sebagai backup manual.
+---
+
+## 🔒 Catatan Privasi
+
+SisaKu dibangun dengan prinsip menghargai privasi Anda. Aplikasi ini tidak mengirimkan data transaksi Anda ke server mana pun. Seluruh kalkulasi dan penyimpanan data murni dilakukan di dalam perangkat Anda.
