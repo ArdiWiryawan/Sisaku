@@ -36,4 +36,6 @@ export const DEFAULT_SETTINGS: AppSettings = {
   theme: "light",
   lastOpenedAt: null,
   schemaVersion: CURRENT_SCHEMA_VERSION,
+  userName: "Dika Pratama",
+  userBio: "Anak hemat masa depan cerah ✨",
 };

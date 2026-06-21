@@ -55,6 +55,8 @@ export type AppSettings = {
   theme: "light" | "dark";
   lastOpenedAt: string | null;
   schemaVersion: number;
+  userName?: string;
+  userBio?: string;
 };
 
 export type PocketSummary = {

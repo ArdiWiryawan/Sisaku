@@ -184,6 +184,8 @@ export default function App() {
           categories={store.categories}
           pockets={store.pockets}
           quickAddTemplates={store.quickAddTemplates}
+          userName={store.settings.userName}
+          onSetActivePocket={store.setActivePocket}
           onAddExpense={() => setExpenseModal({ mode: "create", preset: null })}
           onCreatePocket={() => setShowCreatePocket(true)}
           onQuickAdd={(template) => setExpenseModal({ mode: "create", preset: template })}

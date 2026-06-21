@@ -1,6 +1,9 @@
-import { Bell, Download, Palette, RotateCcw, ShieldCheck, Smartphone } from "lucide-react";
+import { Bell, Download, Palette, RotateCcw, ShieldCheck, Smartphone, Settings, Edit3 } from "lucide-react";
+import { useState } from "react";
 import { APP_VERSION } from "../data/defaults";
+import { Modal } from "../components/Modal";
 import type { AppSettings, Category, Expense, Pocket } from "../types";
+import { calculateStreak } from "../utils/gamification";
 
 type SettingsPageProps = {
   settings: AppSettings;
@@ -15,14 +18,76 @@ type SettingsPageProps = {
 };
 
 export function SettingsPage({ settings, expenses, pockets, categories, storageError, isOffline, onUpdateSettings, onExportCSV, onResetData }: SettingsPageProps) {
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [nameInput, setNameInput] = useState(settings.userName ?? "Dika Pratama");
+  const [bioInput, setBioInput] = useState(settings.userBio ?? "Anak hemat masa depan cerah ✨");
+
+  // Calculate streak from active expenses
+  const activeExpenses = expenses.filter((e) => !e.deletedAt);
+  const streakDays = calculateStreak(activeExpenses.map((e) => e.date));
+
+  const handleOpenEditModal = () => {
+    setNameInput(settings.userName ?? "Dika Pratama");
+    setBioInput(settings.userBio ?? "Anak hemat masa depan cerah ✨");
+    setIsEditModalOpen(true);
+  };
+
+  const handleSaveProfile = (e: React.FormEvent) => {
+    e.preventDefault();
+    onUpdateSettings({
+      userName: nameInput,
+      userBio: bioInput,
+    });
+    setIsEditModalOpen(false);
+  };
+
   return (
     <div className="page settings-page">
-      <section className="page-header">
+      {/* Custom Mobile Header */}
+      <header className="mobile-only-header">
+        <h1>Saya</h1>
+        <button
+          className="mobile-header-icon-btn"
+          type="button"
+          onClick={() => alert("⚙️ Kiko: Pengaturan preferensi dan notifikasi tersimpan secara otomatis di memori lokal HP-mu!")}
+          aria-label="Pengaturan"
+        >
+          <Settings size={20} />
+        </button>
+      </header>
+
+      {/* Desktop traditional header */}
+      <section className="page-header desktop-only-header">
         <div>
           <p className="eyebrow">Saya</p>
           <h1>Atur pengalaman SisaKu.</h1>
         </div>
       </section>
+
+      {/* Profile and Streak section */}
+      <div className="profile-section-v2">
+        <section className="profile-hero-card">
+          <div className="profile-hero-avatar" aria-hidden="true">
+            {(settings.userName ?? "Dika").charAt(0)}
+          </div>
+          <div className="profile-hero-info">
+            <h2>{settings.userName ?? "Dika Pratama"}</h2>
+            <p>{settings.userBio ?? "Anak hemat masa depan cerah ✨"}</p>
+            <button className="btn btn-secondary btn-sm" type="button" onClick={handleOpenEditModal}>
+              <Edit3 size={14} aria-hidden="true" />
+              Edit Profil
+            </button>
+          </div>
+        </section>
+
+        <section className="card streak-card-v2" aria-label="Informasi streak">
+          <div className="streak-icon-wrap" aria-hidden="true">🔥</div>
+          <div className="streak-content-wrap">
+            <h3>Streak hari ini</h3>
+            <p>Kamu sudah mencatat <strong>{streakDays} hari</strong> berturut-turut. Pertahankan streak-mu!</p>
+          </div>
+        </section>
+      </div>
 
       <div className="settings-grid">
         <section className="card profile-card">
@@ -147,6 +212,41 @@ export function SettingsPage({ settings, expenses, pockets, categories, storageE
           <p className="version-line">SisaKu v{APP_VERSION}</p>
         </section>
       </div>
+
+      {/* Edit Profile Modal */}
+      <Modal title="Edit Profil" open={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
+        <form onSubmit={handleSaveProfile} className="profile-edit-form">
+          <div className="field">
+            <label htmlFor="profile-name">Nama Panggilan / Lengkap</label>
+            <input
+              id="profile-name"
+              type="text"
+              value={nameInput}
+              onChange={(e) => setNameInput(e.target.value)}
+              placeholder="Contoh: Dika Pratama"
+              required
+            />
+          </div>
+          <div className="field" style={{ marginTop: "16px" }}>
+            <label htmlFor="profile-bio">Slogan / Bio</label>
+            <input
+              id="profile-bio"
+              type="text"
+              value={bioInput}
+              onChange={(e) => setBioInput(e.target.value)}
+              placeholder="Contoh: Anak hemat masa depan cerah ✨"
+            />
+          </div>
+          <div className="card-actions strong-actions" style={{ marginTop: "24px" }}>
+            <button className="btn btn-secondary" type="button" onClick={() => setIsEditModalOpen(false)}>
+              Batal
+            </button>
+            <button className="btn btn-primary" type="submit">
+              Simpan
+            </button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 }

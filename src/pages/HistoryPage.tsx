@@ -1,9 +1,10 @@
-import { Plus } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import { EmptyState } from "../components/EmptyState";
 import { ExpenseItem } from "../components/ExpenseItem";
 import type { Category, Expense, Pocket } from "../types";
 import { formatDateLabel, getTodayISO, isDateInThisWeek } from "../utils/date";
+import { formatRupiah } from "../utils/currency";
 
 type DateFilter = "all" | "today" | "week";
 
@@ -49,9 +50,36 @@ export function HistoryPage({ expenses, pockets, categories, onAddExpense, onEdi
     return acc;
   }, {});
 
+  // Calculate totals for the summary card
+  const todaySpent = useMemo(() => {
+    return expenses
+      .filter((e) => !e.deletedAt && e.date === today)
+      .reduce((sum, e) => sum + e.amount, 0);
+  }, [expenses, today]);
+
+  const weekSpent = useMemo(() => {
+    return expenses
+      .filter((e) => !e.deletedAt && isDateInThisWeek(e.date, today))
+      .reduce((sum, e) => sum + e.amount, 0);
+  }, [expenses, today]);
+
   return (
     <div className="page history-page">
-      <section className="page-header">
+      {/* Mobile Custom Header */}
+      <header className="mobile-only-header">
+        <h1>Riwayat</h1>
+        <button
+          className="mobile-header-icon-btn"
+          type="button"
+          onClick={() => alert("🔍 Kiko: Fitur pencarian instan akan segera hadir di sini!")}
+          aria-label="Cari transaksi"
+        >
+          <Search size={20} />
+        </button>
+      </header>
+
+      {/* Desktop traditional header */}
+      <section className="page-header desktop-only-header">
         <div>
           <p className="eyebrow">Riwayat</p>
           <h1>Lihat lagi ke mana uangmu pergi.</h1>
@@ -128,6 +156,27 @@ export function HistoryPage({ expenses, pockets, categories, onAddExpense, onEdi
           onAction={expenses.length ? () => { setDateFilter("all"); setPocketFilter("all"); setCategoryFilter("all"); } : onAddExpense}
         />
       )}
+
+      {/* Ringkasan spending box with Kiko at the bottom */}
+      <section className="history-summary-box">
+        <div className="history-summary-mascot" aria-hidden="true">
+          🐿️
+        </div>
+        <div className="history-summary-content">
+          <h3>Ringkasan Belanja</h3>
+          <div className="history-summary-row">
+            <div>
+              <span className="summary-lbl">Hari ini</span>
+              <span className="summary-val">{formatRupiah(todaySpent)}</span>
+            </div>
+            <div className="divider-y" />
+            <div>
+              <span className="summary-lbl">Minggu ini</span>
+              <span className="summary-val">{formatRupiah(weekSpent)}</span>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
