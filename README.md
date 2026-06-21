@@ -2,6 +2,9 @@
 
 > **"Hari ini aman pakai berapa supaya uang saku cukup sampai hari terakhir?"**
 
+[![Live Demo](https://img.shields.io/badge/demo-live-blue.svg?style=for-the-badge&logo=vercel&color=2f6df6)](https://sisaku-chi.vercel.app)
+[![GitHub Repository](https://img.shields.io/badge/github-repo-black.svg?style=for-the-badge&logo=github)](https://github.com/ArdiWiryawan/Sisaku)
+
 SisaKu adalah aplikasi Progressive Web App (PWA) budgeting harian local-first yang dirancang khusus untuk mahasiswa dan anak muda. Berbeda dengan aplikasi keuangan biasa yang hanya mencatat kemana uang pergi, SisaKu berfokus pada **tindakan preventif** dengan memberitahu pengguna batas aman belanja mereka setiap hari secara dinamis.
 
 ---
