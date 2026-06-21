@@ -52,7 +52,7 @@ export type AppSettings = {
   currency: "IDR";
   reminderEnabled: boolean;
   reminderTime: string | null;
-  theme: "system" | "light";
+  theme: "light" | "dark";
   lastOpenedAt: string | null;
   schemaVersion: number;
 };

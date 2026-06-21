@@ -56,6 +56,15 @@ export default function App() {
     return () => window.clearTimeout(timeout);
   }, [toast]);
 
+  useEffect(() => {
+    const root = document.documentElement;
+    if (store.settings.theme === "dark") {
+      root.classList.add("dark-theme");
+    } else {
+      root.classList.remove("dark-theme");
+    }
+  }, [store.settings.theme]);
+
   function handleCreatePocket(input: PocketInput) {
     const pocket = store.createPocket(input);
     store.setActivePocket(pocket.id);

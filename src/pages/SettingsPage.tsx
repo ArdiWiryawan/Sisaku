@@ -1,4 +1,4 @@
-import { Bell, Download, RotateCcw, ShieldCheck, Smartphone } from "lucide-react";
+import { Bell, Download, Palette, RotateCcw, ShieldCheck, Smartphone } from "lucide-react";
 import { APP_VERSION } from "../data/defaults";
 import type { AppSettings, Category, Expense, Pocket } from "../types";
 
@@ -31,6 +31,26 @@ export function SettingsPage({ settings, expenses, pockets, categories, storageE
             <p className="eyebrow">Kiko menemani</p>
             <h2>Data tetap aman di perangkatmu.</h2>
             <p>Semua catatan uang saku tetap lokal. Kamu bisa export CSV kapan saja.</p>
+          </div>
+        </section>
+
+        <section className="card settings-card">
+          <div className="card-header-row">
+            <div>
+              <p className="eyebrow">Tampilan</p>
+              <h2>Tema Aplikasi</h2>
+            </div>
+            <div className="icon-bubble primary">
+              <Palette size={20} aria-hidden="true" />
+            </div>
+          </div>
+          <div className="segmented-control" style={{ marginTop: "8px" }}>
+            <button className={settings.theme === "light" ? "selected" : ""} type="button" onClick={() => onUpdateSettings({ theme: "light" })}>
+              Terang
+            </button>
+            <button className={settings.theme === "dark" ? "selected" : ""} type="button" onClick={() => onUpdateSettings({ theme: "dark" })}>
+              Gelap
+            </button>
           </div>
         </section>
 
