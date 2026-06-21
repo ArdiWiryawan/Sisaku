@@ -11,9 +11,9 @@ import { OnboardingPage } from "./pages/OnboardingPage";
 import { PocketsPage } from "./pages/PocketsPage";
 import { SettingsPage } from "./pages/SettingsPage";
 import type { AppTab, Expense, ExpenseInput, Pocket, PocketInput, QuickAddTemplate } from "./types";
+import { calculatePocketSummary } from "./utils/budgeting";
 import { buildExpenseCSV, downloadCSV } from "./utils/csv";
 import { getTodayISO } from "./utils/date";
-import { calculatePocketSummary } from "./utils/budgeting";
 import { getGamificationStats } from "./utils/gamification";
 
 type ExpenseModalState =
@@ -72,7 +72,7 @@ export default function App() {
     store.setActivePocket(pocket.id);
     setShowCreatePocket(false);
     setActiveTab("home");
-    setToast("Pocket tersimpan. Batas aman harianmu sudah dihitung.");
+    setToast("Pocket siap. Batas aman harianmu sudah dihitung.");
   }
 
   function handleOnboardingPocket(input: PocketInput) {
@@ -80,7 +80,7 @@ export default function App() {
   }
 
   function handleDeletePocket(pocket: Pocket) {
-    const confirmed = window.confirm(`Hapus pocket "${pocket.name}"? Semua pengeluaran di pocket ini juga akan dihapus.`);
+    const confirmed = window.confirm(`Hapus pocket "${pocket.name}"? Semua catatan pengeluaran di pocket ini juga akan ikut terhapus.`);
     if (!confirmed) {
       return;
     }
@@ -92,29 +92,28 @@ export default function App() {
   function handleSubmitExpense(input: ExpenseInput) {
     if (expenseModal?.mode === "edit" && expenseModal.expense) {
       store.updateExpense(expenseModal.expense.id, input);
-      setToast("Pengeluaran diperbarui. Batas aman sudah dihitung ulang.");
+      setToast("Catatan diperbarui. Batas amanmu ikut dihitung ulang.");
     } else {
-      const activeExpensesBefore = store.expenses.filter((e) => !e.deletedAt);
+      const activeExpensesBefore = store.expenses.filter((expense) => !expense.deletedAt);
       const summaryBefore = store.activePocket ? calculatePocketSummary(store.activePocket, store.expenses) : null;
-      const oldStats = summaryBefore 
+      const oldStats = summaryBefore
         ? getGamificationStats(activeExpensesBefore, store.categories, summaryBefore, store.pockets, store.activePocket)
         : null;
 
       const newExpense = store.createExpense(input);
 
       if (oldStats && store.activePocket) {
-        const nextExpenses = [...store.expenses, newExpense].filter((e) => !e.deletedAt);
+        const nextExpenses = [...store.expenses, newExpense].filter((expense) => !expense.deletedAt);
         const summaryAfter = calculatePocketSummary(store.activePocket, nextExpenses);
         const newStats = getGamificationStats(nextExpenses, store.categories, summaryAfter, store.pockets, store.activePocket);
 
         if (newStats.level > oldStats.level) {
-          setToast(`🎉 LEVEL UP! Kamu naik ke Level ${newStats.level}!`);
+          setToast(`Level up! Kamu naik ke Level ${newStats.level}.`);
         } else {
-          // Check if any badge was newly unlocked
-          const oldUnlockedIds = new Set(oldStats.badges.filter(b => b.unlocked).map(b => b.id));
-          const newUnlocked = newStats.badges.filter(b => b.unlocked && !oldUnlockedIds.has(b.id));
+          const oldUnlockedIds = new Set(oldStats.badges.filter((badge) => badge.unlocked).map((badge) => badge.id));
+          const newUnlocked = newStats.badges.filter((badge) => badge.unlocked && !oldUnlockedIds.has(badge.id));
           if (newUnlocked.length > 0) {
-            setToast(`🏆 BADGE BARU! Kamu membuka badge: ${newUnlocked[0].title}!`);
+            setToast(`Badge baru terbuka: ${newUnlocked[0].title}.`);
           } else {
             setToast("Tercatat. Batas aman harianmu sudah diperbarui.");
           }
@@ -128,20 +127,20 @@ export default function App() {
   }
 
   function handleDeleteExpense(expense: Expense) {
-    const confirmed = window.confirm("Hapus pengeluaran ini? Data yang dihapus tidak bisa dikembalikan.");
+    const confirmed = window.confirm("Hapus catatan pengeluaran ini? Data yang dihapus tidak bisa dikembalikan.");
     if (!confirmed) {
       return;
     }
 
     store.deleteExpense(expense.id);
-    setToast("Pengeluaran dihapus. Sisa aman sudah dihitung ulang.");
+    setToast("Catatan dihapus. Sisa aman sudah dihitung ulang.");
   }
 
   function handleExportCSV() {
     const exportableExpenses = store.expenses.filter((expense) => !expense.deletedAt);
 
     if (!exportableExpenses.length) {
-      setToast("Belum ada data untuk diexport.");
+      setToast("Belum ada catatan untuk diunduh.");
       return;
     }
 
@@ -151,14 +150,14 @@ export default function App() {
   }
 
   function handleResetData() {
-    const confirmed = window.confirm("Reset akan menghapus semua data dari perangkat ini. Tindakan ini tidak bisa dibatalkan.");
+    const confirmed = window.confirm("Reset akan menghapus semua data SisaKu dari perangkat ini. Tindakan ini tidak bisa dibatalkan.");
     if (!confirmed) {
       return;
     }
 
     store.resetAllData();
     setActiveTab("home");
-    setToast("Data sudah direset.");
+    setToast("Data SisaKu sudah direset.");
   }
 
   if (!store.settings.hasCompletedOnboarding || !store.pockets.length) {
@@ -204,7 +203,7 @@ export default function App() {
           onDeletePocket={handleDeletePocket}
           onSetActivePocket={(id) => {
             store.setActivePocket(id);
-            setToast("Pocket aktif diperbarui.");
+            setToast("Pocket aktif sudah diganti.");
           }}
           onEditExpense={(expense) => setExpenseModal({ mode: "edit", expense })}
           onDeleteExpense={handleDeleteExpense}
@@ -237,7 +236,7 @@ export default function App() {
       ) : null}
 
       <Modal
-        title={expenseModal?.mode === "edit" ? "Edit pengeluaran" : expenseModal?.preset ? "Cek catat cepat" : "Catat pengeluaran"}
+        title={expenseModal?.mode === "edit" ? "Edit catatan" : expenseModal?.preset ? "Cek catat cepat" : "Catat pengeluaran"}
         open={expenseModal !== null}
         onClose={() => setExpenseModal(null)}
       >
@@ -247,14 +246,14 @@ export default function App() {
           activePocketId={store.activePocketId}
           initialExpense={expenseModal?.mode === "edit" ? expenseModal.expense : null}
           preset={expenseModal?.mode === "create" ? expenseModal.preset : null}
-          submitLabel={expenseModal?.mode === "edit" ? "Simpan Perubahan" : "Simpan"}
+          submitLabel={expenseModal?.mode === "edit" ? "Simpan perubahan" : "Simpan catatan"}
           onSubmit={handleSubmitExpense}
           onCancel={() => setExpenseModal(null)}
         />
       </Modal>
 
-      <Modal title="Buat pocket" open={showCreatePocket} onClose={() => setShowCreatePocket(false)}>
-        <PocketForm submitLabel="Simpan Pocket" onSubmit={handleCreatePocket} onCancel={() => setShowCreatePocket(false)} />
+      <Modal title="Buat pocket baru" open={showCreatePocket} onClose={() => setShowCreatePocket(false)}>
+        <PocketForm submitLabel="Hitung batas aman" onSubmit={handleCreatePocket} onCancel={() => setShowCreatePocket(false)} />
       </Modal>
 
       <Toast message={toast} />

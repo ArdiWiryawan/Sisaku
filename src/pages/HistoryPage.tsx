@@ -54,11 +54,11 @@ export function HistoryPage({ expenses, pockets, categories, onAddExpense, onEdi
       <section className="page-header">
         <div>
           <p className="eyebrow">Riwayat</p>
-          <h1>Cek dan koreksi pengeluaran.</h1>
+          <h1>Lihat lagi ke mana uangmu pergi.</h1>
         </div>
         <button className="btn btn-primary" type="button" onClick={onAddExpense}>
           <Plus size={18} aria-hidden="true" />
-          Catat
+          Catat baru
         </button>
       </section>
 
@@ -122,9 +122,9 @@ export function HistoryPage({ expenses, pockets, categories, onAddExpense, onEdi
         </section>
       ) : (
         <EmptyState
-          title={expenses.length ? "Tidak ada transaksi yang cocok" : "Belum ada pengeluaran"}
-          body={expenses.length ? "Coba ubah filter tanggal, pocket, atau kategori." : "Mulai dari transaksi kecil hari ini."}
-          actionLabel={expenses.length ? "Reset Filter" : "Catat Pengeluaran"}
+          title={expenses.length ? "Belum ketemu catatan yang cocok" : "Belum ada pengeluaran"}
+          body={expenses.length ? "Coba longgarkan filter tanggal, pocket, atau kategori." : "Catat transaksi pertama supaya SisaKu bisa membaca ritmemu."}
+          actionLabel={expenses.length ? "Reset filter" : "Catat sekarang"}
           onAction={expenses.length ? () => { setDateFilter("all"); setPocketFilter("all"); setCategoryFilter("all"); } : onAddExpense}
         />
       )}

@@ -1,6 +1,6 @@
 import type { Category, Expense, Pocket, PocketSummary } from "../types";
 import { formatRupiah } from "./currency";
-import { addDaysISO, getTodayISO, diffDays } from "./date";
+import { addDaysISO, diffDays, getTodayISO } from "./date";
 
 export type Badge = {
   id: string;
@@ -24,13 +24,14 @@ export type GamificationStats = {
 };
 
 export function calculateStreak(expenseDates: string[]): number {
-  if (expenseDates.length === 0) return 0;
+  if (expenseDates.length === 0) {
+    return 0;
+  }
 
   const uniqueDates = Array.from(new Set(expenseDates)).sort((a, b) => b.localeCompare(a));
   const today = getTodayISO();
   const yesterday = addDaysISO(today, -1);
 
-  // If latest expense date is older than yesterday, current streak is 0
   if (uniqueDates[0] !== today && uniqueDates[0] !== yesterday) {
     return 0;
   }
@@ -49,7 +50,7 @@ export function calculateStreak(expenseDates: string[]): number {
 export function getLevelInfo(totalXp: number) {
   let level = 1;
   let currentLevelXpStart = 0;
-  let nextLevelXpStart = 200; // Target to reach Level 2
+  let nextLevelXpStart = 200;
 
   while (totalXp >= nextLevelXpStart) {
     level++;
@@ -82,11 +83,9 @@ export function getGamificationStats(
   const activeExpenses = expenses.filter((expense) => !expense.deletedAt);
   const txCount = activeExpenses.length;
 
-  // 1. Volume XP (+20 XP per active record)
   const baseTxXp = txCount * 20;
 
-  // 2. Frequency / Streak XP (+15 XP per streak day + milestone bonuses)
-  const expenseDates = activeExpenses.map((e) => e.date);
+  const expenseDates = activeExpenses.map((expense) => expense.date);
   const streakDays = calculateStreak(expenseDates);
   let streakXp = streakDays * 15;
   if (streakDays >= 30) streakXp += 1000;
@@ -94,18 +93,15 @@ export function getGamificationStats(
   else if (streakDays >= 7) streakXp += 150;
   else if (streakDays >= 3) streakXp += 50;
 
-  // 3. Volume Milestones
   let volumeXp = 0;
   if (txCount >= 50) volumeXp += 800;
   else if (txCount >= 30) volumeXp += 400;
   else if (txCount >= 15) volumeXp += 150;
   else if (txCount >= 5) volumeXp += 50;
 
-  // 4. Small Transaction Bonus (+10 XP per transaction <= Rp 20,000)
-  const smallTxCount = activeExpenses.filter((e) => e.amount <= 20000).length;
+  const smallTxCount = activeExpenses.filter((expense) => expense.amount <= 20000).length;
   const smallTxXp = smallTxCount * 10;
 
-  // 5. Budget Adherence / Savings Performance
   let budgetPerformanceXp = 0;
   if (summary.status === "Aman") {
     budgetPerformanceXp += 120;
@@ -119,17 +115,10 @@ export function getGamificationStats(
     budgetPerformanceXp += Math.round(savingsPercent * 1.5);
   }
 
-  // Calculate total XP
   const xp = baseTxXp + streakXp + volumeXp + smallTxXp + budgetPerformanceXp;
-
-  // Level info
   const lvlInfo = getLevelInfo(xp);
 
-  // Badge Unlocks Checks
   const categoryName = new Map(categories.map((category) => [category.id, category.name]));
-  const hasCategory = (needle: string) =>
-    activeExpenses.some((expense) => (categoryName.get(expense.categoryId) ?? "").toLowerCase().includes(needle));
-
   const countMatches = (needle: string) =>
     activeExpenses.filter((expense) => {
       const cat = (categoryName.get(expense.categoryId) ?? "").toLowerCase();
@@ -137,20 +126,17 @@ export function getGamificationStats(
       return cat.includes(needle) || title.includes(needle);
     }).length;
 
-  // Night Owl Check (18:00 - 06:00, <= Rp20.000)
   const nightExpensesCount = activeExpenses.filter((expense) => {
     const dateObj = new Date(expense.createdAt);
     const hour = dateObj.getHours();
     return (hour >= 18 || hour < 6) && expense.amount <= 20000;
   }).length;
 
-  // Detailed note check
-  const detailedNotesCount = activeExpenses.filter((e) => e.note && e.note.trim().length > 0).length;
+  const detailedNotesCount = activeExpenses.filter((expense) => expense.note && expense.note.trim().length > 0).length;
 
-  // Extreme Saving Check (remains > 50% budget when elapsed duration > 80%)
   const hasExtremeSaving = pockets.some((pocket) => {
-    const pocketExpenses = activeExpenses.filter((e) => e.pocketId === pocket.id);
-    const totalSpent = pocketExpenses.reduce((sum, e) => sum + e.amount, 0);
+    const pocketExpenses = activeExpenses.filter((expense) => expense.pocketId === pocket.id);
+    const totalSpent = pocketExpenses.reduce((sum, expense) => sum + expense.amount, 0);
     const remaining = pocket.totalBudget - totalSpent;
     const totalDays = Math.max(1, diffDays(pocket.endDate, pocket.startDate) + 1);
     const elapsed = Math.max(0, Math.min(totalDays, diffDays(getTodayISO(), pocket.startDate) + 1));
@@ -162,71 +148,71 @@ export function getGamificationStats(
     {
       id: "starter",
       title: "Pemula Hemat",
-      description: "Membuat pocket pertamamu untuk mulai berhemat.",
-      icon: "⭐",
+      description: "Pocket pertama sudah dibuat. Ritme hematmu resmi dimulai.",
+      icon: "\u2B50",
       unlocked: pockets.length > 0,
     },
     {
       id: "loyal_recorder",
       title: "Pencatat Setia",
-      description: "Mencatat transaksi selama 3 hari berturut-turut.",
-      icon: "📅",
+      description: "Catat transaksi selama 3 hari berturut-turut.",
+      icon: "\u{1F5D3}\uFE0F",
       unlocked: streakDays >= 3,
     },
     {
       id: "calm_pace",
-      title: "Pace Tenang",
-      description: "Menjaga ritme keuangan tetap 'Aman' di atas 30% hari.",
-      icon: "🧘",
+      title: "Ritme Tenang",
+      description: "Status tetap aman setelah lebih dari 30% periode berjalan.",
+      icon: "\u{1F9D8}",
       unlocked: summary.status === "Aman" && summary.timeElapsedPercent > 30,
     },
     {
       id: "night_saving",
       title: "Malam Hemat",
-      description: "Mencatat 3 pengeluaran kecil (<= Rp20rb) di malam hari (18:00 - 06:00).",
-      icon: "🌙",
+      description: "Catat 3 pengeluaran kecil di malam hari tanpa kebablasan.",
+      icon: "\u{1F319}",
       unlocked: nightExpensesCount >= 3,
     },
     {
       id: "pocket_collector",
       title: "Kolektor Pocket",
-      description: "Membuat minimal 3 pocket terpisah.",
-      icon: "💼",
+      description: "Punya 3 pocket terpisah untuk rencana yang berbeda.",
+      icon: "\u{1F4BC}",
       unlocked: pockets.length >= 3,
     },
     {
       id: "discipline_master",
       title: "Master Disiplin",
-      description: "Berhasil mencatat hingga 15 pengeluaran.",
-      icon: "🏆",
+      description: "Berhasil mencatat 15 pengeluaran.",
+      icon: "\u{1F3C6}",
       unlocked: txCount >= 15,
     },
     {
       id: "coffee_lover",
-      title: "Pecinta Kopi",
-      description: "Mencatat 3 pengeluaran kopi atau minuman favorit.",
-      icon: "☕",
+      title: "Kopi Terkendali",
+      description: "Catat 3 kopi atau minuman favorit tanpa lupa nominalnya.",
+      icon: "\u2615",
       unlocked: countMatches("kopi") + countMatches("minum") + countMatches("coffee") >= 3,
     },
     {
       id: "culinary_soldier",
-      title: "Prajurit Kuliner",
-      description: "Mencatat 5 pengeluaran makanan.",
-      icon: "🍜",
+      title: "Makan Terpantau",
+      description: "Catat 5 pengeluaran makanan agar pola jajan makin terbaca.",
+      icon: "\u{1F35C}",
       unlocked: countMatches("makan") + countMatches("food") >= 5,
     },
     {
       id: "financial_detective",
       title: "Detektif Finansial",
-      description: "Menambahkan catatan detail pada 5 pengeluaran.",
-      icon: "🔍",
+      description: "Tambahkan detail pada 5 catatan pengeluaran.",
+      icon: "\u{1F50D}",
       unlocked: detailedNotesCount >= 5,
     },
     {
       id: "waste_free",
       title: "Bebas Boros",
-      description: "Menyisakan > 50% budget saat durasi pocket sudah lewat 80%.",
-      icon: "🛡️",
+      description: "Sisa uang masih di atas 50% saat periode hampir selesai.",
+      icon: "\u{1F6E1}\uFE0F",
       unlocked: hasExtremeSaving,
     },
   ];
@@ -240,11 +226,11 @@ export function getGamificationStats(
     xpTarget: lvlInfo.nextLevelXpStart,
     xpProgress: lvlInfo.progressPercent,
     streakDays,
-    missionTitle: summary.status === "Aman" ? "Jaga ritme hari ini" : "Misi penyelamatan",
+    missionTitle: summary.status === "Aman" ? "Jaga ritme hari ini" : "Pulihkan ritme hari ini",
     missionBody:
       summary.status === "Aman"
         ? `Usahakan tetap di bawah ${formatRupiah(Math.max(summary.safePerDay, 0))} hari ini.`
-        : "Pilih kebutuhan utama dulu. Kiko bantu hitung ulang setelah kamu catat.",
+        : "Pilih kebutuhan utama dulu. Setelah kamu catat, Kiko hitung ulang batas amannya.",
     missionProgress,
     missionReward: summary.status === "Aman" ? 25 : 15,
     badges,

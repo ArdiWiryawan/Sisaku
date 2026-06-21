@@ -20,8 +20,8 @@ export function QuickAddChips({ templates, categories, onSelect }: QuickAddChips
   return (
     <section className="section-block quick-add-card">
       <div className="section-heading">
-        <h2>Catat cepat</h2>
-        <button className="inline-link" type="button" aria-label="Lihat semua template catat cepat">+ Lainnya</button>
+        <h2>Catat sekali tap</h2>
+        <button className="inline-link" type="button" aria-label="Lihat semua template catat cepat">+ Template</button>
       </div>
       <div className="quick-add-row" aria-label="Template catat cepat">
         {templates

@@ -48,17 +48,17 @@ export function ExpenseForm({ pockets, categories, activePocketId, initialExpens
     setError(null);
 
     if (parsedAmount <= 0) {
-      setError("Nominal harus lebih dari Rp0.");
+      setError("Masukkan nominal yang lebih dari Rp0.");
       return;
     }
 
     if (!categoryId) {
-      setError("Pilih kategori pengeluaran.");
+      setError("Pilih kategori supaya catatanmu rapi.");
       return;
     }
 
     if (!pocketId) {
-      setError("Pilih pocket untuk pengeluaran ini.");
+      setError("Pilih pocket tempat pengeluaran ini dicatat.");
       return;
     }
 
@@ -76,7 +76,7 @@ export function ExpenseForm({ pockets, categories, activePocketId, initialExpens
     return (
       <div className="empty-state compact">
         <h2>Belum ada pocket</h2>
-        <p>Buat pocket dulu supaya pengeluaran punya tempat.</p>
+        <p>Buat pocket dulu agar setiap pengeluaran punya tujuan yang jelas.</p>
         <button className="btn btn-secondary" type="button" onClick={onCancel}>
           Tutup
         </button>
@@ -87,20 +87,20 @@ export function ExpenseForm({ pockets, categories, activePocketId, initialExpens
   return (
     <form className="stack-form" onSubmit={handleSubmit}>
       <div className="field hero-input">
-        <label htmlFor="expense-amount">Keluar berapa?</label>
+        <label htmlFor="expense-amount">Nominal pengeluaran</label>
         <input
           id="expense-amount"
           autoFocus
           inputMode="numeric"
           value={amount}
           onChange={(event) => setAmount(event.target.value)}
-          placeholder="Contoh: 15000"
+          placeholder="Misal: 15000"
         />
-        <span>{parsedAmount > 0 ? formatRupiah(parsedAmount) : "Masukkan nominal"}</span>
+        <span>{parsedAmount > 0 ? formatRupiah(parsedAmount) : "Tulis angka tanpa titik juga boleh"}</span>
       </div>
 
       <fieldset className="field fieldset">
-        <legend>Untuk apa?</legend>
+        <legend>Dipakai untuk apa?</legend>
         <div className="category-grid">
           {categories.map((category) => {
             const iconByCategory = new Map([
@@ -128,7 +128,7 @@ export function ExpenseForm({ pockets, categories, activePocketId, initialExpens
       </fieldset>
 
       <div className="field">
-        <label htmlFor="expense-pocket">Masuk ke pocket mana?</label>
+        <label htmlFor="expense-pocket">Catat ke pocket</label>
         <select id="expense-pocket" value={pocketId} onChange={(event) => setPocketId(event.target.value)}>
           {pockets.map((pocket) => (
             <option key={pocket.id} value={pocket.id}>
@@ -140,8 +140,8 @@ export function ExpenseForm({ pockets, categories, activePocketId, initialExpens
 
       <div className="form-grid-two">
         <div className="field">
-          <label htmlFor="expense-title">Nama transaksi opsional</label>
-          <input id="expense-title" value={title} onChange={(event) => setTitle(event.target.value)} placeholder="Contoh: Ayam geprek" />
+          <label htmlFor="expense-title">Nama transaksi</label>
+          <input id="expense-title" value={title} onChange={(event) => setTitle(event.target.value)} placeholder="Misal: Ayam geprek" />
         </div>
         <div className="field">
           <label htmlFor="expense-date">Tanggal</label>
@@ -150,8 +150,8 @@ export function ExpenseForm({ pockets, categories, activePocketId, initialExpens
       </div>
 
       <div className="field">
-        <label htmlFor="expense-note">Catatan opsional</label>
-        <textarea id="expense-note" value={note} onChange={(event) => setNote(event.target.value)} placeholder="Contoh: makan siang" />
+        <label htmlFor="expense-note">Catatan tambahan</label>
+        <textarea id="expense-note" value={note} onChange={(event) => setNote(event.target.value)} placeholder="Misal: makan siang setelah kelas" />
       </div>
 
       {error ? <p className="form-error">{error}</p> : null}

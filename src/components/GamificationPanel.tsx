@@ -10,12 +10,10 @@ type GamificationPanelProps = {
 export function GamificationPanel({ stats }: GamificationPanelProps) {
   const [showAllBadges, setShowAllBadges] = useState(false);
   const unlockedCount = stats.badges.filter((badge) => badge.unlocked).length;
-
-  // Show first 4 badges on the main strip
   const previewBadges = stats.badges.slice(0, 4);
 
   return (
-    <section className="game-panel" aria-label="Progress gamifikasi">
+    <section className="game-panel" aria-label="Progress hemat">
       <div className="level-card">
         <div className="level-medal">
           <Trophy size={24} aria-hidden="true" />
@@ -32,8 +30,8 @@ export function GamificationPanel({ stats }: GamificationPanelProps) {
         <button
           className="reward-chest-btn"
           type="button"
-          aria-label="Buka peti hadiah level"
-          onClick={() => alert("🎁 Kiko: Terus catat pengeluaranmu secara rutin! Peti kejutan hemat ini akan terbuka otomatis saat kamu mencapai Level 5!")}
+          aria-label="Lihat peti hadiah level"
+          onClick={() => alert("Kiko: terus catat pengeluaranmu. Peti hadiah akan terbuka saat kamu mencapai Level 5.")}
         >
           {"\u{1F381}"}
         </button>
@@ -63,7 +61,7 @@ export function GamificationPanel({ stats }: GamificationPanelProps) {
 
       <div className="badge-strip">
         <div className="section-heading">
-          <h2>Badge saya</h2>
+          <h2>Badge hemat</h2>
           <button
             className="inline-link"
             type="button"
@@ -84,10 +82,10 @@ export function GamificationPanel({ stats }: GamificationPanelProps) {
         </div>
       </div>
 
-      <Modal title="Badge Pencapaian" open={showAllBadges} onClose={() => setShowAllBadges(false)}>
+      <Modal title="Badge hematmu" open={showAllBadges} onClose={() => setShowAllBadges(false)}>
         <div className="modal-scroll-area">
           <p className="modal-description-text">
-            Kamu telah membuka <strong>{unlockedCount} dari {stats.badges.length}</strong> badge. Terus catat transaksi dan jaga uang saku agar koin berlimpah!
+            Kamu sudah membuka <strong>{unlockedCount} dari {stats.badges.length}</strong> badge. Terus catat transaksi agar ritme uangmu makin terbaca.
           </p>
           <div className="badges-modal-list">
             {stats.badges.map((badge) => (
@@ -97,7 +95,7 @@ export function GamificationPanel({ stats }: GamificationPanelProps) {
                   <h3>{badge.title}</h3>
                   <p>{badge.description}</p>
                   <span className={`badge-status-pill ${badge.unlocked ? "unlocked" : "locked"}`}>
-                    {badge.unlocked ? "✓ Terbuka" : "🔒 Terkunci"}
+                    {badge.unlocked ? "Terbuka" : "Terkunci"}
                   </span>
                 </div>
               </article>

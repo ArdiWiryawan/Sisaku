@@ -31,8 +31,8 @@ export function HomePage({ activePocket, expenses, categories, pockets, quickAdd
       <div className="page narrow-page">
         <EmptyState
           title="Belum ada pocket"
-          body="Buat pocket pertama untuk tahu batas aman harianmu."
-          actionLabel="+ Buat Pocket"
+          body="Buat pocket dulu. Setelah itu SisaKu akan hitung batas aman yang bisa kamu pakai setiap hari."
+          actionLabel="+ Buat pocket"
           onAction={onCreatePocket}
         />
       </div>
@@ -50,12 +50,12 @@ export function HomePage({ activePocket, expenses, categories, pockets, quickAdd
     <div className="page dashboard-page">
       <section className="page-header">
         <div>
-          <p className="eyebrow">Hai, pejuang hemat</p>
-          <h1>Jaga uang saku bareng Kiko.</h1>
+          <p className="eyebrow">Hai, siap jaga ritme?</p>
+          <h1>Tahu batas aman sebelum uang menipis.</h1>
         </div>
         <button className="btn btn-primary" type="button" onClick={onAddExpense}>
           <Plus size={18} aria-hidden="true" />
-          Catat Pengeluaran
+          Catat pengeluaran
         </button>
       </section>
 
@@ -65,15 +65,15 @@ export function HomePage({ activePocket, expenses, categories, pockets, quickAdd
 
           <section className="summary-strip" aria-label="Ringkasan budget">
             <div>
-              <span>Sisa uang</span>
+            <span>Masih tersisa</span>
               <strong>{formatRupiah(summary.remainingMoney)}</strong>
             </div>
             <div>
-              <span>Sisa hari</span>
+            <span>Hari tersisa</span>
               <strong>{summary.remainingDays}</strong>
             </div>
             <div>
-              <span>Pace</span>
+            <span>Ritme</span>
               <strong>{summary.paceDifference <= 0 ? "Tenang" : "Cepat"}</strong>
             </div>
           </section>
@@ -89,7 +89,7 @@ export function HomePage({ activePocket, expenses, categories, pockets, quickAdd
 
           <section className="card recent-card">
             <div className="section-heading">
-              <h2>Pengeluaran terbaru</h2>
+              <h2>Catatan terbaru</h2>
               <span>{summary.paceMessage}</span>
             </div>
             {recentExpenses.length ? (
@@ -108,8 +108,8 @@ export function HomePage({ activePocket, expenses, categories, pockets, quickAdd
             ) : (
               <EmptyState
                 title="Belum ada pengeluaran"
-                body="Catat transaksi kecil pertamamu supaya batas aman lebih akurat."
-                actionLabel="Catat Pengeluaran"
+                body="Mulai dari transaksi kecil. Semakin rutin dicatat, semakin jujur batas amanmu."
+                actionLabel="Catat sekarang"
                 onAction={onAddExpense}
               />
             )}

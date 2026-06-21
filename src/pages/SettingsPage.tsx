@@ -20,7 +20,7 @@ export function SettingsPage({ settings, expenses, pockets, categories, storageE
       <section className="page-header">
         <div>
           <p className="eyebrow">Saya</p>
-          <h1>Profil hematmu.</h1>
+          <h1>Atur pengalaman SisaKu.</h1>
         </div>
       </section>
 
@@ -28,9 +28,9 @@ export function SettingsPage({ settings, expenses, pockets, categories, storageE
         <section className="card profile-card">
           <img src="/assets/kiko-mascot.png" alt="Kiko, maskot SisaKu" />
           <div>
-            <p className="eyebrow">Kiko menemani</p>
-            <h2>Data tetap aman di perangkatmu.</h2>
-            <p>Semua catatan uang saku tetap lokal. Kamu bisa export CSV kapan saja.</p>
+            <p className="eyebrow">Kiko menjaga ritme</p>
+            <h2>Catatanmu tetap di perangkat ini.</h2>
+            <p>SisaKu menyimpan data secara lokal. Kamu bisa unduh CSV kapan saja kalau butuh cadangan.</p>
           </div>
         </section>
 
@@ -38,7 +38,7 @@ export function SettingsPage({ settings, expenses, pockets, categories, storageE
           <div className="card-header-row">
             <div>
               <p className="eyebrow">Tampilan</p>
-              <h2>Tema Aplikasi</h2>
+              <h2>Tema aplikasi</h2>
             </div>
             <div className="icon-bubble primary">
               <Palette size={20} aria-hidden="true" />
@@ -66,8 +66,8 @@ export function SettingsPage({ settings, expenses, pockets, categories, storageE
           </div>
           <label className="toggle-row">
             <span>
-              <strong>Reminder placeholder</strong>
-              <small>Notifikasi native belum diaktifkan di MVP.</small>
+              <strong>Pengingat cek uang</strong>
+              <small>Notifikasi native belum aktif di versi MVP.</small>
             </span>
             <input
               type="checkbox"
@@ -96,7 +96,7 @@ export function SettingsPage({ settings, expenses, pockets, categories, storageE
               <Download size={20} aria-hidden="true" />
             </div>
           </div>
-          <p>Export data ke CSV agar kamu punya cadangan di luar aplikasi.</p>
+          <p>Unduh CSV untuk menyimpan cadangan atau mengecek catatanmu di spreadsheet.</p>
           <div className="settings-stats">
             <span>{pockets.length} pocket</span>
             <span>{expenses.length} transaksi</span>
@@ -109,7 +109,7 @@ export function SettingsPage({ settings, expenses, pockets, categories, storageE
             </button>
             <button className="btn btn-danger" type="button" onClick={onResetData}>
               <RotateCcw size={16} aria-hidden="true" />
-              Reset Data
+              Reset data
             </button>
           </div>
           {storageError ? <p className="form-error">{storageError}</p> : null}
@@ -128,9 +128,9 @@ export function SettingsPage({ settings, expenses, pockets, categories, storageE
           <ol className="simple-steps">
             <li>Android Chrome: buka menu browser, lalu pilih Install app atau Add to Home screen.</li>
             <li>iPhone Safari: tap Share, pilih Add to Home Screen, lalu tap Add.</li>
-            <li>Setelah dipasang, SisaKu bisa dibuka seperti aplikasi biasa.</li>
+            <li>Setelah terpasang, SisaKu bisa dibuka seperti aplikasi biasa.</li>
           </ol>
-          <p className="offline-note">{isOffline ? "Kamu sedang offline. Data tetap tersimpan di perangkat ini." : "Offline basic aktif setelah app pernah dibuka dari build production."}</p>
+          <p className="offline-note">{isOffline ? "Kamu sedang offline. Catatan tetap tersimpan di perangkat ini." : "Mode offline aktif setelah app pernah dibuka dari versi production."}</p>
         </section>
 
         <section className="card settings-card">
@@ -143,7 +143,7 @@ export function SettingsPage({ settings, expenses, pockets, categories, storageE
               <ShieldCheck size={20} aria-hidden="true" />
             </div>
           </div>
-          <p>Data kamu tersimpan di perangkat ini. SisaKu tidak mengirim data pengeluaran ke server dan tidak membutuhkan koneksi bank atau e-wallet untuk MVP.</p>
+          <p>Data pengeluaranmu tersimpan di perangkat ini. SisaKu tidak mengirim catatan ke server dan tidak perlu koneksi bank atau e-wallet di versi MVP.</p>
           <p className="version-line">SisaKu v{APP_VERSION}</p>
         </section>
       </div>

@@ -66,19 +66,19 @@ export function PocketsPage({ pockets, expenses, categories, activePocketId, onC
       <section className="page-header">
         <div>
           <p className="eyebrow">Pocket</p>
-          <h1>Atur uang berdasarkan hari.</h1>
+          <h1>Bagi uangmu jadi rencana yang jelas.</h1>
         </div>
         <button className="btn btn-primary" type="button" onClick={() => setFormMode("create")}>
           <Plus size={18} aria-hidden="true" />
-          Buat Pocket
+          Buat pocket
         </button>
       </section>
 
       {!pockets.length ? (
         <EmptyState
           title="Belum ada pocket"
-          body="Buat pocket seperti Uang Minggu Ini atau Uang Makan."
-          actionLabel="+ Buat Pocket"
+          body="Mulai dari pocket sederhana, misalnya uang minggu ini, uang makan, atau transport."
+          actionLabel="+ Buat pocket"
           onAction={() => setFormMode("create")}
         />
       ) : (
@@ -120,7 +120,7 @@ export function PocketsPage({ pockets, expenses, categories, activePocketId, onC
                   <strong>{formatRupiah(selectedSummary.remainingMoney)}</strong>
                 </div>
                 <div>
-                  <span>Aman per hari</span>
+                  <span>Batas aman harian</span>
                   <strong>{formatRupiah(selectedSummary.safePerDay)}</strong>
                 </div>
               </div>
@@ -128,7 +128,7 @@ export function PocketsPage({ pockets, expenses, categories, activePocketId, onC
               <div className="detail-date">
                 <CalendarDays size={18} aria-hidden="true" />
                 <span>
-                  {formatDateLabel(selectedPocket.startDate)} sampai {formatDateLabel(selectedPocket.endDate)} / {selectedSummary.remainingDays} hari tersisa
+                  {formatDateLabel(selectedPocket.startDate)} sampai {formatDateLabel(selectedPocket.endDate)} / {selectedSummary.remainingDays} hari lagi
                 </span>
               </div>
 
@@ -138,7 +138,7 @@ export function PocketsPage({ pockets, expenses, categories, activePocketId, onC
               <div className="card-actions strong-actions">
                 <button className="btn btn-secondary" type="button" onClick={() => setFormMode("edit")}>
                   <Pencil size={16} aria-hidden="true" />
-                  Edit Pocket
+                  Edit pocket
                 </button>
                 <button className="btn btn-danger" type="button" onClick={() => onDeletePocket(selectedPocket)}>
                   <Trash2 size={16} aria-hidden="true" />
@@ -147,7 +147,7 @@ export function PocketsPage({ pockets, expenses, categories, activePocketId, onC
               </div>
 
               <div className="section-heading with-top-border">
-                <h3>Transaksi pocket</h3>
+                <h3>Catatan di pocket ini</h3>
                 <span>{selectedExpenses.length} transaksi</span>
               </div>
               {selectedExpenses.length ? (
@@ -164,17 +164,17 @@ export function PocketsPage({ pockets, expenses, categories, activePocketId, onC
                   ))}
                 </div>
               ) : (
-                <EmptyState title="Belum ada pengeluaran" body="Transaksi yang masuk ke pocket ini akan muncul di sini." />
+                <EmptyState title="Belum ada pengeluaran" body="Setelah kamu mencatat transaksi ke pocket ini, riwayatnya akan muncul di sini." />
               )}
             </section>
           ) : null}
         </div>
       )}
 
-      <Modal title={formMode === "edit" ? "Edit pocket" : "Buat pocket"} open={formMode !== null} onClose={() => setFormMode(null)}>
+      <Modal title={formMode === "edit" ? "Edit pocket" : "Buat pocket baru"} open={formMode !== null} onClose={() => setFormMode(null)}>
         <PocketForm
           initialPocket={formMode === "edit" ? selectedPocket : null}
-          submitLabel={formMode === "edit" ? "Simpan Perubahan" : "Simpan Pocket"}
+          submitLabel={formMode === "edit" ? "Simpan perubahan" : "Hitung batas aman"}
           onSubmit={handleSubmitPocket}
           onCancel={() => setFormMode(null)}
         />

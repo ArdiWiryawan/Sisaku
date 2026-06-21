@@ -28,43 +28,43 @@ export function getBudgetStatus(summary: Pick<PocketSummary, "remainingMoney" | 
 
 export function getStatusMessage(status: BudgetStatus): string {
   if (status === "Aman") {
-    return "Masih aman. Lanjutkan ritme ini.";
+    return "Masih aman. Ritmemu bagus.";
   }
 
   if (status === "Waspada") {
-    return "Mulai mepet. Coba jaga pengeluaran hari ini.";
+    return "Mulai mepet. Pilih yang penting dulu.";
   }
 
   if (status === "Bahaya") {
-    return "Uang mulai tipis. Prioritaskan kebutuhan utama dulu.";
+    return "Uang menipis. Fokus ke kebutuhan utama.";
   }
 
-  return "Nice, budget ini sudah sampai akhir periode.";
+  return "Selesai. Saatnya mulai pocket baru.";
 }
 
 function getPaceMessage(paceDifference: number): string {
   if (paceDifference <= 0) {
-    return "Pengeluaranmu masih lebih pelan dari waktu.";
+    return "Ritmemu masih lebih pelan dari waktu.";
   }
 
   if (paceDifference <= 10) {
-    return "Pengeluaran sedikit lebih cepat, tapi masih bisa dijaga.";
+    return "Sedikit lebih cepat, tapi masih bisa dijaga.";
   }
 
   if (paceDifference <= 25) {
-    return "Pengeluaran mulai lebih cepat dari waktu.";
+    return "Mulai lebih cepat dari rencana.";
   }
 
-  return "Pengeluaran jauh lebih cepat dari waktu.";
+  return "Jauh lebih cepat dari rencana.";
 }
 
 function getRecoveryMessage(summary: Omit<PocketSummary, "status" | "statusMessage" | "paceMessage" | "recoveryMessage">): string | null {
   if (summary.remainingMoney <= 0) {
-    return `Budget ini sudah lewat ${formatRupiahAbs(summary.remainingMoney)}. Tidak apa-apa, lanjut dari hari ini dan prioritaskan kebutuhan utama dulu.`;
+    return `Pocket ini sudah lewat ${formatRupiahAbs(summary.remainingMoney)}. Tidak apa-apa, lanjut dari hari ini dan prioritaskan kebutuhan utama dulu.`;
   }
 
   if (summary.remainingDays <= 0) {
-    return "Periode budget ini sudah selesai. Kamu bisa buat pocket baru untuk periode berikutnya.";
+    return "Periode pocket ini sudah selesai. Buat pocket baru untuk mulai ritme berikutnya.";
   }
 
   const dailyOverspend = summary.spentToday - summary.initialSafePerDay;
@@ -72,11 +72,11 @@ function getRecoveryMessage(summary: Omit<PocketSummary, "status" | "statusMessa
 
   if (dailyOverspend > 0 && futureDays > 0) {
     const futureSafePerDay = summary.remainingMoney / futureDays;
-    return `Hari ini lewat ${formatRupiah(dailyOverspend)}. Masih bisa aman kalau ${futureDays} hari ke depan jaga di bawah ${formatRupiah(futureSafePerDay)}/hari.`;
+    return `Hari ini lewat ${formatRupiah(dailyOverspend)}. Masih bisa dikejar kalau ${futureDays} hari ke depan kamu jaga di bawah ${formatRupiah(futureSafePerDay)}/hari.`;
   }
 
   if (summary.todayAllowance < summary.initialSafePerDay * 0.8 || summary.paceDifference > 10) {
-    return `Mulai mepet. Coba jaga pengeluaran di bawah ${formatRupiah(summary.todayAllowance)}/hari untuk sisa periode.`;
+    return `Mulai mepet. Untuk sisa periode, coba tahan pengeluaran di bawah ${formatRupiah(summary.todayAllowance)}/hari.`;
   }
 
   return null;

@@ -8,10 +8,10 @@ type MascotCoachProps = {
 export function MascotCoach({ summary }: MascotCoachProps) {
   const message =
     summary.status === "Aman"
-      ? "Kiko lihat ritmemu masih aman. Catat yang kecil-kecil biar angka tetap jujur."
+      ? "Ritmemu masih aman. Catat transaksi kecil juga, biar angka harian tetap akurat."
       : summary.status === "Waspada"
-        ? "Mulai mepet, tapi belum terlambat. Kiko sarankan tahan jajan dulu hari ini."
-        : "Pelan-pelan. Prioritaskan makan, transport, dan kebutuhan kuliah dulu.";
+        ? "Mulai mepet, tapi masih bisa dikejar. Tahan dulu pengeluaran yang belum penting."
+        : "Fokus ke kebutuhan utama dulu: makan, transport, dan hal yang benar-benar wajib.";
 
   return (
     <section className="mascot-coach">

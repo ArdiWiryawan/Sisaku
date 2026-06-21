@@ -1,7 +1,7 @@
 {
   "name": "SisaKu",
   "short_name": "SisaKu",
-  "description": "Tahu batas aman uangmu setiap hari.",
+  "description": "Hitung batas aman harian, catat pengeluaran, dan jaga uang tetap cukup sampai akhir periode.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

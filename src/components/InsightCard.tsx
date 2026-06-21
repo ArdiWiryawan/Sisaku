@@ -24,17 +24,17 @@ export function InsightCard({ expenses, categories, summary }: InsightCardProps)
 
   const recommendation =
     summary.status === "Aman"
-      ? "Ritmenya sudah enak. Catat transaksi kecil supaya angka tetap akurat."
+      ? "Ritmemu aman. Terus catat pengeluaran kecil supaya batas harian tetap presisi."
       : summary.status === "Waspada"
-        ? "Hari ini coba pilih pengeluaran yang paling penting dulu."
-        : "Prioritaskan makan, transport, dan kebutuhan kuliah dulu.";
+        ? "Hari ini pilih yang paling penting dulu. Pengeluaran kecil tetap bisa bikin ritme berubah."
+        : "Jeda dulu pengeluaran tambahan. Pakai uang untuk kebutuhan utama terlebih dahulu.";
 
   return (
     <section className="card insight-card">
       <div className="card-header-row">
         <div>
-          <p className="eyebrow">Ringkasan Kiko</p>
-          <h2>Stat harianmu</h2>
+          <p className="eyebrow">Pantauan Kiko</p>
+          <h2>Ritme uangmu</h2>
         </div>
         <div className="icon-bubble primary">
           <Lightbulb size={20} aria-hidden="true" />
@@ -42,7 +42,7 @@ export function InsightCard({ expenses, categories, summary }: InsightCardProps)
       </div>
       <div className="insight-grid">
         <div>
-          <span>Kategori terbesar</span>
+          <span>Paling banyak</span>
           <strong>{biggest ? categoryById.get(biggest[0]) ?? "Lainnya" : "Belum ada"}</strong>
         </div>
         <div>

@@ -47,17 +47,17 @@ export function PocketForm({ initialPocket, submitLabel, onSubmit, onCancel }: P
     setError(null);
 
     if (!name.trim()) {
-      setError("Beri nama pocket dulu.");
+      setError("Beri nama pocket agar mudah dikenali.");
       return;
     }
 
     if (totalBudget <= 0) {
-      setError("Jumlah uang harus lebih dari Rp0.");
+      setError("Masukkan jumlah uang yang lebih dari Rp0.");
       return;
     }
 
     if (totalDays <= 0) {
-      setError("Tanggal akhir tidak boleh sebelum tanggal mulai.");
+      setError("Tanggal akhir harus setelah tanggal mulai.");
       return;
     }
 
@@ -75,17 +75,17 @@ export function PocketForm({ initialPocket, submitLabel, onSubmit, onCancel }: P
     <form className="stack-form" onSubmit={handleSubmit}>
       <div className="field">
         <label htmlFor="pocket-name">Nama pocket</label>
-        <input id="pocket-name" value={name} onChange={(event) => setName(event.target.value)} placeholder="Uang Minggu Ini" />
+        <input id="pocket-name" value={name} onChange={(event) => setName(event.target.value)} placeholder="Misal: Uang Minggu Ini" />
       </div>
 
       <div className="field">
-        <label htmlFor="pocket-budget">Jumlah uang</label>
+        <label htmlFor="pocket-budget">Total uang yang tersedia</label>
         <input
           id="pocket-budget"
           inputMode="numeric"
           value={budget}
           onChange={(event) => setBudget(event.target.value)}
-          placeholder="Contoh: 300000"
+          placeholder="Misal: 300000"
         />
       </div>
 
@@ -95,20 +95,20 @@ export function PocketForm({ initialPocket, submitLabel, onSubmit, onCancel }: P
       </div>
 
       <fieldset className="field fieldset">
-        <legend>Uang ini harus cukup sampai kapan?</legend>
+        <legend>Target cukup sampai kapan?</legend>
         <div className="segmented-control">
           <button className={dateMode === "duration" ? "selected" : ""} type="button" onClick={() => setDateMode("duration")}>
-            Jumlah hari
+            Pakai jumlah hari
           </button>
           <button className={dateMode === "endDate" ? "selected" : ""} type="button" onClick={() => setDateMode("endDate")}>
-            Tanggal akhir
+            Pilih tanggal akhir
           </button>
         </div>
       </fieldset>
 
       {dateMode === "duration" ? (
         <div className="field">
-          <label htmlFor="pocket-duration">Durasi hari</label>
+          <label htmlFor="pocket-duration">Berapa hari?</label>
           <input
             id="pocket-duration"
             type="number"
@@ -125,23 +125,23 @@ export function PocketForm({ initialPocket, submitLabel, onSubmit, onCancel }: P
       )}
 
       <div className="field">
-        <label htmlFor="pocket-type">Jenis pocket</label>
+        <label htmlFor="pocket-type">Tujuan pocket</label>
         <select id="pocket-type" value={type} onChange={(event) => setType(event.target.value as PocketType)}>
-          <option value="general">Umum</option>
+          <option value="general">Kebutuhan umum</option>
           <option value="food">Uang makan</option>
           <option value="transport">Transport</option>
-          <option value="event">Event</option>
+          <option value="event">Acara / rencana</option>
           <option value="emergency">Darurat</option>
         </select>
       </div>
 
       <div className="field">
-        <label htmlFor="pocket-note">Catatan opsional</label>
-        <textarea id="pocket-note" value={note} onChange={(event) => setNote(event.target.value)} placeholder="Contoh: uang sampai kiriman berikutnya" />
+        <label htmlFor="pocket-note">Catatan tambahan</label>
+        <textarea id="pocket-note" value={note} onChange={(event) => setNote(event.target.value)} placeholder="Misal: uang sampai kiriman berikutnya" />
       </div>
 
       <div className="form-preview" aria-live="polite">
-        <span>Preview aman per hari</span>
+        <span>Perkiraan aman per hari</span>
         <strong>{previewSafe > 0 ? formatRupiah(previewSafe) : "Isi nominal dan durasi dulu"}</strong>
         {totalDays > 0 ? <small>{totalDays} hari, sampai {effectiveEndDate}</small> : null}
       </div>
