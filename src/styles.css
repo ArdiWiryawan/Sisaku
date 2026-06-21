@@ -116,7 +116,7 @@ small {
   width: min(1120px, 100%);
   min-width: 0;
   margin: 0 auto;
-  padding: 18px 16px 96px;
+  padding: 92px 16px 96px;
 }
 
 .narrow-page {
@@ -941,7 +941,8 @@ small {
 
 .segmented-control {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
   gap: 6px;
   border-radius: 18px;
   padding: 5px;
@@ -1924,6 +1925,10 @@ img.brand-mark {
 }
 
 @media (max-width: 700px) {
+  .page-header .btn {
+    display: none;
+  }
+
   .safe-card {
     grid-template-columns: 1fr;
     min-height: 0;
@@ -2771,6 +2776,14 @@ body {
     linear-gradient(180deg, #090d16 0%, #0f172a 100%);
 }
 
+/* Fix mobile & desktop app-shell background bleed-through in Dark Mode */
+.dark-theme .app-shell {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.08), transparent 19rem),
+    radial-gradient(circle at 10% 10%, rgba(59, 130, 246, 0.06), transparent 26rem),
+    linear-gradient(180deg, #090d16 0%, #0f172a 100%) !important;
+}
+
 .dark-theme .topbar,
 .dark-theme .side-nav {
   background: rgba(15, 23, 42, 0.85);
@@ -2787,12 +2800,13 @@ body {
   color: #94a3b8;
 }
 
+/* Premium Gold Active Indicator to match brand guidelines */
 .dark-theme .bottom-nav button.active,
 .dark-theme .side-nav .bottom-nav button.active {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-  color: white;
-  border-color: rgba(59, 130, 246, 0.4);
-  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.25);
+  background: linear-gradient(180deg, #ffd65a, #ffb01b);
+  color: #24170f;
+  border-color: rgba(251, 191, 36, 0.5);
+  box-shadow: 0 8px 24px rgba(251, 191, 36, 0.28);
 }
 
 .dark-theme .safe-card {
@@ -2820,12 +2834,26 @@ body {
 }
 
 .dark-theme .safe-pocket {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fbbf24;
 }
 
 .dark-theme .safe-status-chip {
   background: rgba(30, 41, 59, 0.8);
   color: #34d399;
+}
+
+.dark-theme .safe-label {
+  color: rgba(248, 250, 252, 0.7);
+}
+
+.dark-theme .safe-subtext {
+  color: rgba(248, 250, 252, 0.85);
+}
+
+.dark-theme .safe-card-footer {
+  color: rgba(248, 250, 252, 0.75);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .dark-theme .safe-card-footer span::before {
