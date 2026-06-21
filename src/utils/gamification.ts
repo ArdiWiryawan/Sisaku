@@ -8,6 +8,8 @@ export type Badge = {
   description: string;
   icon: string;
   unlocked: boolean;
+  progress: number;
+  target: number;
 };
 
 export type GamificationStats = {
@@ -144,76 +146,99 @@ export function getGamificationStats(
     return remaining >= pocket.totalBudget * 0.5 && timePercent > 80;
   });
 
+  const coffeeCount = countMatches("kopi") + countMatches("minum") + countMatches("coffee");
+  const foodCount = countMatches("makan") + countMatches("food");
+
   const badges: Badge[] = [
     {
       id: "starter",
-      title: "Pemula Hemat",
-      description: "Pocket pertama sudah dibuat. Ritme hematmu resmi dimulai.",
+      title: "Pecah Telur",
+      description: "Pocket pertama sudah dibuat. Pola hematmu resmi dimulai.",
       icon: "\u2B50",
       unlocked: pockets.length > 0,
+      progress: pockets.length > 0 ? 1 : 0,
+      target: 1,
     },
     {
       id: "loyal_recorder",
-      title: "Pencatat Setia",
+      title: "Jalur Konsisten",
       description: "Catat transaksi selama 3 hari berturut-turut.",
       icon: "\u{1F5D3}\uFE0F",
       unlocked: streakDays >= 3,
+      progress: Math.min(3, streakDays),
+      target: 3,
     },
     {
       id: "calm_pace",
-      title: "Ritme Tenang",
+      title: "Pawang Budget",
       description: "Status tetap aman setelah lebih dari 30% periode berjalan.",
       icon: "\u{1F9D8}",
       unlocked: summary.status === "Aman" && summary.timeElapsedPercent > 30,
+      progress: (summary.status === "Aman" && summary.timeElapsedPercent > 30) ? 1 : 0,
+      target: 1,
     },
     {
       id: "night_saving",
-      title: "Malam Hemat",
-      description: "Catat 3 pengeluaran kecil di malam hari tanpa kebablasan.",
+      title: "Anti Laper Mata",
+      description: "Catat 3 pengeluaran kecil (<= Rp20rb) di malam hari tanpa kebablasan.",
       icon: "\u{1F319}",
       unlocked: nightExpensesCount >= 3,
+      progress: Math.min(3, nightExpensesCount),
+      target: 3,
     },
     {
       id: "pocket_collector",
-      title: "Kolektor Pocket",
-      description: "Punya 3 pocket terpisah untuk rencana yang berbeda.",
+      title: "Jago Nge-Pos",
+      description: "Membuat minimal 3 pocket terpisah untuk alokasi dana.",
       icon: "\u{1F4BC}",
       unlocked: pockets.length >= 3,
+      progress: Math.min(3, pockets.length),
+      target: 3,
     },
     {
       id: "discipline_master",
-      title: "Master Disiplin",
-      description: "Berhasil mencatat 15 pengeluaran.",
+      title: "Rajin Pangkal Hemat",
+      description: "Berhasil mencatat total 15 pengeluaran.",
       icon: "\u{1F3C6}",
       unlocked: txCount >= 15,
+      progress: Math.min(15, txCount),
+      target: 15,
     },
     {
       id: "coffee_lover",
-      title: "Kopi Terkendali",
-      description: "Catat 3 kopi atau minuman favorit tanpa lupa nominalnya.",
+      title: "Ngopi Senja",
+      description: "Mencatat 3 pengeluaran kopi atau minuman favorit.",
       icon: "\u2615",
-      unlocked: countMatches("kopi") + countMatches("minum") + countMatches("coffee") >= 3,
+      unlocked: coffeeCount >= 3,
+      progress: Math.min(3, coffeeCount),
+      target: 3,
     },
     {
       id: "culinary_soldier",
-      title: "Makan Terpantau",
-      description: "Catat 5 pengeluaran makanan agar pola jajan makin terbaca.",
+      title: "Kenyang Terkendali",
+      description: "Mencatat 5 pengeluaran makanan biar pola jajan makin terpantau.",
       icon: "\u{1F35C}",
-      unlocked: countMatches("makan") + countMatches("food") >= 5,
+      unlocked: foodCount >= 5,
+      progress: Math.min(5, foodCount),
+      target: 5,
     },
     {
       id: "financial_detective",
-      title: "Detektif Finansial",
-      description: "Tambahkan detail pada 5 catatan pengeluaran.",
+      title: "Si Paling Rinci",
+      description: "Menambahkan detail catatan pada 5 pengeluaran.",
       icon: "\u{1F50D}",
       unlocked: detailedNotesCount >= 5,
+      progress: Math.min(5, detailedNotesCount),
+      target: 5,
     },
     {
       id: "waste_free",
-      title: "Bebas Boros",
-      description: "Sisa uang masih di atas 50% saat periode hampir selesai.",
+      title: "Juara Bertahan",
+      description: "Sisa uang masih di atas 50% saat periode pocket sudah lewat 80%.",
       icon: "\u{1F6E1}\uFE0F",
       unlocked: hasExtremeSaving,
+      progress: hasExtremeSaving ? 1 : 0,
+      target: 1,
     },
   ];
 
@@ -226,7 +251,7 @@ export function getGamificationStats(
     xpTarget: lvlInfo.nextLevelXpStart,
     xpProgress: lvlInfo.progressPercent,
     streakDays,
-    missionTitle: summary.status === "Aman" ? "Jaga ritme hari ini" : "Pulihkan ritme hari ini",
+    missionTitle: summary.status === "Aman" ? "Jaga batas aman" : "Pulihkan batas aman",
     missionBody:
       summary.status === "Aman"
         ? `Usahakan tetap di bawah ${formatRupiah(Math.max(summary.safePerDay, 0))} hari ini.`

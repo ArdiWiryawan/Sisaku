@@ -24,9 +24,9 @@ export function InsightCard({ expenses, categories, summary }: InsightCardProps)
 
   const recommendation =
     summary.status === "Aman"
-      ? "Ritmemu aman. Terus catat pengeluaran kecil supaya batas harian tetap presisi."
+      ? "Batas amanmu terjaga. Terus catat pengeluaran kecil supaya batas harian tetap presisi."
       : summary.status === "Waspada"
-        ? "Hari ini pilih yang paling penting dulu. Pengeluaran kecil tetap bisa bikin ritme berubah."
+        ? "Hari ini pilih yang paling penting dulu. Pengeluaran kecil tetap bisa bikin batas aman berubah."
         : "Jeda dulu pengeluaran tambahan. Pakai uang untuk kebutuhan utama terlebih dahulu.";
 
   return (

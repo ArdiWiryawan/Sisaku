@@ -123,7 +123,7 @@ export function HistoryPage({ expenses, pockets, categories, onAddExpense, onEdi
       ) : (
         <EmptyState
           title={expenses.length ? "Belum ketemu catatan yang cocok" : "Belum ada pengeluaran"}
-          body={expenses.length ? "Coba longgarkan filter tanggal, pocket, atau kategori." : "Catat transaksi pertama supaya SisaKu bisa membaca ritmemu."}
+          body={expenses.length ? "Coba longgarkan filter tanggal, pocket, atau kategori." : "Catat transaksi pertama supaya SisaKu bisa membaca pola belanjamu."}
           actionLabel={expenses.length ? "Reset filter" : "Catat sekarang"}
           onAction={expenses.length ? () => { setDateFilter("all"); setPocketFilter("all"); setCategoryFilter("all"); } : onAddExpense}
         />

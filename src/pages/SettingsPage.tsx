@@ -28,7 +28,7 @@ export function SettingsPage({ settings, expenses, pockets, categories, storageE
         <section className="card profile-card">
           <img src="/assets/kiko-mascot.png" alt="Kiko, maskot SisaKu" />
           <div>
-            <p className="eyebrow">Kiko menjaga ritme</p>
+            <p className="eyebrow">Kiko menemani</p>
             <h2>Catatanmu tetap di perangkat ini.</h2>
             <p>SisaKu menyimpan data secara lokal. Kamu bisa unduh CSV kapan saja kalau butuh cadangan.</p>
           </div>

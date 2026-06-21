@@ -85,7 +85,7 @@ export function GamificationPanel({ stats }: GamificationPanelProps) {
       <Modal title="Badge hematmu" open={showAllBadges} onClose={() => setShowAllBadges(false)}>
         <div className="modal-scroll-area">
           <p className="modal-description-text">
-            Kamu sudah membuka <strong>{unlockedCount} dari {stats.badges.length}</strong> badge. Terus catat transaksi agar ritme uangmu makin terbaca.
+            Kamu sudah membuka <strong>{unlockedCount} dari {stats.badges.length}</strong> badge. Terus catat transaksi agar pola pengeluaranmu makin terkendali.
           </p>
           <div className="badges-modal-list">
             {stats.badges.map((badge) => (
@@ -95,7 +95,7 @@ export function GamificationPanel({ stats }: GamificationPanelProps) {
                   <h3>{badge.title}</h3>
                   <p>{badge.description}</p>
                   <span className={`badge-status-pill ${badge.unlocked ? "unlocked" : "locked"}`}>
-                    {badge.unlocked ? "Terbuka" : "Terkunci"}
+                    {badge.unlocked ? "✓ Terbuka" : `🔒 Terkunci (${badge.progress}/${badge.target})`}
                   </span>
                 </div>
               </article>

@@ -64,7 +64,7 @@ function getRecoveryMessage(summary: Omit<PocketSummary, "status" | "statusMessa
   }
 
   if (summary.remainingDays <= 0) {
-    return "Periode pocket ini sudah selesai. Buat pocket baru untuk mulai ritme berikutnya.";
+    return "Periode pocket ini sudah selesai. Buat pocket baru untuk mulai periode belanja berikutnya.";
   }
 
   const dailyOverspend = summary.spentToday - summary.initialSafePerDay;

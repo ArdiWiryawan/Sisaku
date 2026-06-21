@@ -50,8 +50,8 @@ export function HomePage({ activePocket, expenses, categories, pockets, quickAdd
     <div className="page dashboard-page">
       <section className="page-header">
         <div>
-          <p className="eyebrow">Hai, siap jaga ritme?</p>
-          <h1>Tahu batas aman sebelum uang menipis.</h1>
+          <p className="eyebrow">Hai, pejuang hemat</p>
+          <h1>Jaga uang saku bareng Kiko.</h1>
         </div>
         <button className="btn btn-primary" type="button" onClick={onAddExpense}>
           <Plus size={18} aria-hidden="true" />
@@ -73,7 +73,7 @@ export function HomePage({ activePocket, expenses, categories, pockets, quickAdd
               <strong>{summary.remainingDays}</strong>
             </div>
             <div>
-            <span>Ritme</span>
+            <span>Laju Belanja</span>
               <strong>{summary.paceDifference <= 0 ? "Tenang" : "Cepat"}</strong>
             </div>
           </section>
