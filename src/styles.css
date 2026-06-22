@@ -3320,6 +3320,10 @@ body {
   .desktop-only-header {
     display: none !important;
   }
+  .safe-card {
+    min-height: 0 !important;
+    margin-bottom: 16px !important;
+  }
 }
 
 @media (min-width: 960px) {
