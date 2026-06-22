@@ -101,37 +101,39 @@ export function ExpenseForm({ pockets, categories, activePocketId, initialExpens
 
       <fieldset className="field fieldset">
         <legend>Dipakai untuk apa?</legend>
-        <div className="category-grid">
-          {categories.map((category) => {
-            const iconByCategory = new Map([
-              ["cat_food", "\u{1F35C}"], // 🍜
-              ["cat_drink", "\u2615"], // ☕
-              ["cat_transport", "\u{1F68C}"], // 🚍
-              ["cat_rent", "\u{1F3E0}"], // 🏠
-              ["cat_laundry", "\u{1F9FA}"], // 🧺
-              ["cat_college", "\u{1F4D6}"], // 📖
-              ["cat_print", "\u{1F5A8}\uFE0F"], // 🖨️
-              ["cat_org", "\u{1F465}"], // 👥
-              ["cat_fun", "\u{1F3AE}"], // 🎮
-              ["cat_shopping", "\u{1F6CD}"], // 🛍️
-              ["cat_health", "\u{1F48A}"], // 💊
-              ["cat_emergency", "\u{1F6E1}"], // 🛡️
-              ["cat_other", "\u{1F4AC}"], // 💬
-            ]);
-            return (
-              <button
-                className={categoryId === category.id ? "selected" : ""}
-                key={category.id}
-                type="button"
-                onClick={() => setCategoryId(category.id)}
-              >
-                <span className="category-emoji" aria-hidden="true">
-                  {iconByCategory.get(category.id) ?? "\u2728"}
-                </span>
-                {category.name}
-              </button>
-            );
-          })}
+        <div className="category-scroll-container">
+          <div className="category-grid">
+            {categories.map((category) => {
+              const iconByCategory = new Map([
+                ["cat_food", "\u{1F35C}"], // 🍜
+                ["cat_drink", "\u2615"], // ☕
+                ["cat_transport", "\u{1F68C}"], // 🚍
+                ["cat_rent", "\u{1F3E0}"], // 🏠
+                ["cat_laundry", "\u{1F9FA}"], // 🧺
+                ["cat_college", "\u{1F4D6}"], // 📖
+                ["cat_print", "\u{1F5A8}\uFE0F"], // 🖨️
+                ["cat_org", "\u{1F465}"], // 👥
+                ["cat_fun", "\u{1F3AE}"], // 🎮
+                ["cat_shopping", "\u{1F6CD}"], // 🛍️
+                ["cat_health", "\u{1F48A}"], // 💊
+                ["cat_emergency", "\u{1F6E1}"], // 🛡️
+                ["cat_other", "\u{1F4AC}"], // 💬
+              ]);
+              return (
+                <button
+                  className={categoryId === category.id ? "selected" : ""}
+                  key={category.id}
+                  type="button"
+                  onClick={() => setCategoryId(category.id)}
+                >
+                  <span className="category-emoji" aria-hidden="true">
+                    {iconByCategory.get(category.id) ?? "\u2728"}
+                  </span>
+                  {category.name}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </fieldset>
 
