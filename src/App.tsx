@@ -238,7 +238,7 @@ export default function App() {
       ) : null}
 
       <Modal
-        title={expenseModal?.mode === "edit" ? "Edit catatan" : expenseModal?.preset ? "Cek catat cepat" : "Catat pengeluaran"}
+        title={expenseModal?.mode === "edit" ? "Edit catatan" : "Catat pengeluaran"}
         open={expenseModal !== null}
         onClose={() => setExpenseModal(null)}
       >

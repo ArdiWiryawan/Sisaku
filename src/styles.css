@@ -3405,6 +3405,33 @@ body {
   margin: 0;
 }
 
+.mobile-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mobile-header-catat-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 42px;
+  border-radius: 21px;
+  border: 0;
+  background: #FFD43B;
+  color: #2C2520;
+  font-weight: 850;
+  font-size: 0.85rem;
+  padding: 0 16px;
+  box-shadow: var(--shadow-card);
+  transition: var(--transition-bounce);
+}
+
+.mobile-header-catat-btn:active {
+  transform: scale(0.92);
+}
+
 .mobile-notification-bell,
 .mobile-header-plus-btn,
 .mobile-header-icon-btn {

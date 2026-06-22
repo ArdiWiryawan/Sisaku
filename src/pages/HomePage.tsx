@@ -77,14 +77,25 @@ export function HomePage({
             <p className="mobile-greetings-eyebrow">Haiii, {userName.split(" ")[0]}! 👋</p>
           </div>
         </div>
-        <button
-          className="mobile-notification-bell"
-          type="button"
-          aria-label="Notifikasi"
-          onClick={() => alert("🔔 Kiko: Semua pemberitahuan budget terupdate otomatis di sini!")}
-        >
-          <Bell size={20} aria-hidden="true" />
-        </button>
+        <div className="mobile-header-actions">
+          <button
+            className="mobile-header-catat-btn"
+            type="button"
+            onClick={onAddExpense}
+            aria-label="Catat pengeluaran"
+          >
+            <Plus size={16} aria-hidden="true" />
+            <span>Catat</span>
+          </button>
+          <button
+            className="mobile-notification-bell"
+            type="button"
+            aria-label="Notifikasi"
+            onClick={() => alert("🔔 Kiko: Semua pemberitahuan budget terupdate otomatis di sini!")}
+          >
+            <Bell size={20} aria-hidden="true" />
+          </button>
+        </div>
       </header>
 
       {/* 2. Mockup Active Pocket Selector */}
