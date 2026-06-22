@@ -1087,7 +1087,7 @@ small {
 .modal-handle {
   width: 42px;
   height: 5px;
-  margin: 0 auto 12px;
+  margin: 0 auto 18px;
   border-radius: 999px;
   background: #cbd5e1;
 }
@@ -2332,7 +2332,7 @@ body {
 
 @media (max-width: 430px) {
   .page {
-    padding-inline: 14px;
+    padding-inline: 16px;
   }
 
   .dashboard-page .page-header {
@@ -3315,7 +3315,7 @@ body {
     display: none !important;
   }
   .page {
-    padding: 16px 12px 120px !important;
+    padding: 16px 16px 120px !important;
   }
   .desktop-only-header {
     display: none !important;
@@ -3427,7 +3427,7 @@ body {
   color: #2C2520;
   font-weight: 850;
   font-size: 0.85rem;
-  padding: 0 16px;
+  padding: 0 20px;
   box-shadow: var(--shadow-card);
   transition: var(--transition-bounce);
 }
@@ -3717,6 +3717,16 @@ body {
   border-radius: 6px;
   align-self: flex-start;
   transition: var(--transition-bounce);
+  position: relative;
+}
+
+.set-active-trigger-btn::after {
+  content: '';
+  position: absolute;
+  top: -12px;
+  bottom: -12px;
+  left: -12px;
+  right: -12px;
 }
 
 .set-active-trigger-btn:hover {
@@ -4032,6 +4042,115 @@ body {
 .dark-theme .category-scroll-container {
   background: #0f172a;
   border-color: #334155;
+}
+
+/* UI/UX Audit Improvements */
+
+/* 1. Letter Spacing on Headings */
+h1, h2, h3, h4, h5, h6, .safe-amount, .page-header h1, .modal-title {
+  letter-spacing: -0.02em !important;
+}
+
+/* 2. Cokelat Medium for Labels to Improve Contrast */
+.summary-card-label,
+.summary-lbl,
+.pocket-sel-label,
+.eyebrow {
+  color: #5C5045 !important;
+  font-weight: 750 !important;
+}
+
+/* 3. Border-Radius Standardization */
+.card,
+.summary-card-item,
+.pocket-card-v2,
+.safe-card {
+  border-radius: 24px !important;
+}
+
+/* 4. Dynamic Safe Status Chip Colors */
+.status-ring-aman .safe-status-chip {
+  background: #f0fbf0 !important;
+  color: #2e8b29 !important;
+  border: 1px solid rgba(46, 139, 41, 0.25) !important;
+}
+
+.status-ring-waspada .safe-status-chip {
+  background: #fff9f0 !important;
+  color: #d97706 !important;
+  border: 1px solid rgba(217, 119, 6, 0.25) !important;
+}
+
+.status-ring-bahaya .safe-status-chip {
+  background: #fff5f5 !important;
+  color: #e11d48 !important;
+  border: 1px solid rgba(225, 29, 72, 0.25) !important;
+}
+
+.status-ring-selesai .safe-status-chip {
+  background: #f5f4f2 !important;
+  color: #736457 !important;
+  border: 1px solid rgba(115, 100, 87, 0.2) !important;
+}
+
+/* 4b. Dynamic Status Pill inside Safe Card */
+.safe-card .status-pill.status-aman {
+  background: #eaf8da !important;
+  color: #24751f !important;
+}
+
+.safe-card .status-pill.status-waspada {
+  background: #fff3cd !important;
+  color: #856404 !important;
+  border: 0 !important;
+}
+
+.safe-card .status-pill.status-bahaya {
+  background: #f8d7da !important;
+  color: #721c24 !important;
+  border: 0 !important;
+}
+
+.safe-card .status-pill.status-selesai {
+  background: #e2e3e5 !important;
+  color: #383d41 !important;
+  border: 0 !important;
+}
+
+/* 5. Mascot Spacing Protection on Mobile */
+@media (max-width: 959.98px) {
+  .safe-content {
+    max-width: 62% !important;
+  }
+}
+
+/* 6. Horizontal Scroll Fade Mask */
+.quick-add-row {
+  mask-image: linear-gradient(to right, black 85%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+}
+
+/* 7. Scrollbar Custom styling */
+.category-scroll-container::-webkit-scrollbar {
+  width: 5px;
+}
+.category-scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+.category-scroll-container::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 99px;
+}
+.dark-theme .category-scroll-container::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
+/* 8. Spacing Between Sections */
+.quick-add-card,
+.mission-tracker-card,
+.recent-card,
+.insight-card {
+  margin-top: 28px !important;
 }
 
 
