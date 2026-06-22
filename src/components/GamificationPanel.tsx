@@ -43,15 +43,13 @@ export function GamificationPanel({ stats }: GamificationPanelProps) {
         </div>
         <div className="mission-copy">
           <div className="mission-title-row">
-            <div>
-              <p className="eyebrow">Misi hari ini</p>
-              <h2>{stats.missionTitle}</h2>
-            </div>
+            <p className="eyebrow">Misi hari ini</p>
             <div className="mission-reward">
-              <Gift size={16} aria-hidden="true" />
+              <Gift size={14} aria-hidden="true" />
               +{stats.missionReward} XP
             </div>
           </div>
+          <h2>{stats.missionTitle}</h2>
           <p>{stats.missionBody}</p>
           <div className="mission-progress">
             <span style={{ width: `${stats.missionProgress}%` }} />

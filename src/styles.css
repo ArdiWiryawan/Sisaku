@@ -1037,14 +1037,28 @@ small {
 .category-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  gap: 10px;
 }
 
 .category-grid button {
   border: 1px solid var(--color-border);
+  border-radius: 18px;
   background: white;
   color: var(--color-text);
   box-shadow: 0 2px 6px rgba(36, 23, 15, 0.02);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  min-height: 52px;
+  font-size: 0.94rem;
+  font-weight: 750;
+  line-height: 1.25;
+}
+
+.category-grid button:last-child {
+  grid-column: span 2;
 }
 
 .category-grid button:hover {
@@ -1302,9 +1316,7 @@ small {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .category-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
+
 
   .onboarding-page {
     grid-template-columns: 1fr 0.85fr;
@@ -1790,29 +1802,52 @@ img.brand-mark {
 .mission-card {
   align-items: flex-start;
   background: linear-gradient(135deg, #fffefa 0%, #eef8e9 100%);
+  padding: 18px 20px;
+  gap: 12px;
+}
+
+.mission-card .mission-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 16px;
+}
+
+.mission-card .eyebrow {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  font-weight: 750;
+  letter-spacing: 0.05em;
 }
 
 .mission-card h2 {
-  margin-bottom: 4px;
+  font-size: 1.45rem;
+  line-height: 1.25;
+  margin-top: 2px;
+  margin-bottom: 6px;
 }
 
 .mission-card p:not(.eyebrow) {
   color: var(--color-muted);
   font-weight: 650;
+  font-size: 0.96rem;
+  line-height: 1.45;
 }
 
 .mission-progress {
   margin-top: 10px;
+  height: 8px;
 }
 
 .mission-reward {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   border-radius: 999px;
-  padding: 8px 10px;
+  padding: 6px 12px;
   background: #fff2bf;
   color: #a05a00;
+  font-size: 0.8rem;
+  font-weight: 800;
 }
 
 .badge-strip {
@@ -2010,9 +2045,7 @@ img.brand-mark {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .mission-card {
-    display: grid;
-  }
+
 
   .mascot-coach {
     align-items: center;
@@ -2580,14 +2613,15 @@ body {
 
 .mission-card {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .mission-title-row {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 10px;
+  margin-bottom: 6px;
 }
 
 .mission-title-row .eyebrow {
@@ -2796,6 +2830,8 @@ body {
   .mascot-coach {
     border-radius: 26px;
   }
+
+
 
   .badge-row {
     gap: 8px;
@@ -4096,8 +4132,8 @@ body {
 
 /* Category Selector Scroll Container */
 .category-scroll-container {
-  max-height: 160px;
-  overflow-y: auto;
+  max-height: none;
+  overflow-y: visible;
   border: 1px solid var(--color-border);
   border-radius: 16px;
   padding: 8px;
