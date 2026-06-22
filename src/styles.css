@@ -3315,14 +3315,39 @@ body {
     display: none !important;
   }
   .page {
-    padding: 24px 16px 120px !important;
+    padding: 16px 12px 120px !important;
   }
   .desktop-only-header {
     display: none !important;
   }
+  .mobile-only-header {
+    padding: 8px 4px 6px !important;
+    margin-bottom: 8px !important;
+  }
+  .mobile-pocket-selector {
+    margin-bottom: 12px !important;
+    padding: 6px 12px !important;
+  }
   .safe-card {
     min-height: 0 !important;
-    margin-bottom: 16px !important;
+    margin-bottom: 10px !important;
+    padding: 16px !important;
+  }
+  .safe-label {
+    margin-top: 12px !important;
+  }
+  .safe-status-chip {
+    margin-top: 8px !important;
+  }
+  .safe-subtext {
+    margin-top: 8px !important;
+  }
+  .safe-card-footer {
+    margin-top: 10px !important;
+    padding-top: 8px !important;
+  }
+  .summary-cards-grid {
+    margin: 8px 0 12px !important;
   }
 }
 
