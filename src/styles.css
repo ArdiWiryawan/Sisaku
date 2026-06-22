@@ -626,40 +626,101 @@ small {
 .expense-item {
   display: flex;
   min-width: 0;
-  align-items: flex-start;
+  align-items: stretch;
   justify-content: space-between;
-  gap: 12px;
+  gap: 16px;
   border: 1px solid var(--color-border);
-  border-radius: 18px;
-  padding: 12px;
-  background: white;
+  border-radius: 24px;
+  padding: 16px 20px;
+  background: var(--color-surface);
 }
 
 .expense-main {
+  flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
-.expense-main span,
+.expense-main strong {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--color-text);
+  line-height: 1.3;
+}
+
+.expense-main span {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  margin-top: 6px;
+  line-height: 1.35;
+}
+
 .expense-main p {
   display: block;
-  margin-top: 3px;
-  color: var(--color-muted);
   font-size: 0.85rem;
+  color: var(--color-muted);
+  margin-top: 8px;
+  line-height: 1.4;
+  padding: 4px 10px;
+  background: rgba(44, 37, 32, 0.03);
+  border-left: 3px solid var(--color-primary);
+  border-radius: 4px 8px 8px 4px;
+}
+
+.dark-theme .expense-main p {
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .expense-side {
-  display: grid;
-  justify-items: end;
-  gap: 8px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 10px;
 }
 
 .expense-side > strong {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: var(--color-text);
   white-space: nowrap;
 }
 
 .expense-actions {
   display: flex;
   gap: 6px;
+}
+
+.expense-item .icon-button {
+  width: 36px !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  border-radius: 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  background: var(--color-surface) !important;
+  border: 1px solid var(--color-border) !important;
+  transition: var(--transition-bounce) !important;
+}
+
+.expense-item .icon-button:hover {
+  background: var(--color-border) !important;
+  color: var(--color-text) !important;
+}
+
+.expense-item .icon-button.danger {
+  color: var(--color-danger);
+}
+
+.expense-item .icon-button.danger:hover {
+  background: var(--color-danger-bg) !important;
+  color: var(--color-danger) !important;
 }
 
 .empty-state {
@@ -1215,20 +1276,9 @@ small {
     grid-template-columns: 1fr;
   }
 
-  .expense-item {
-    display: grid;
-  }
-
+  /* Mobile expense item remains side-by-side flexbox */
   .expense-side {
     justify-items: stretch;
-  }
-
-  .expense-side > strong {
-    justify-self: start;
-  }
-
-  .expense-actions {
-    justify-content: flex-end;
   }
 }
 
@@ -1856,7 +1906,6 @@ img.brand-mark {
 
 .expense-item {
   border-color: rgba(239, 228, 204, 0.95);
-  border-radius: 24px;
 }
 
 .profile-card {
@@ -1976,7 +2025,7 @@ img.brand-mark {
 
 @media (max-width: 430px) {
   .safe-content {
-    padding-right: 0;
+    padding-right: 110px !important;
   }
 
   .safe-mascot-wrap {
@@ -2171,8 +2220,9 @@ body {
 
 .safe-card-footer span {
   display: inline-flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 6px;
+  text-align: left;
 }
 
 .safe-card-footer span::before {
@@ -2182,6 +2232,8 @@ body {
   border-radius: 4px;
   background: #c58312;
   opacity: 0.7;
+  margin-top: 5px;
+  flex-shrink: 0;
 }
 
 .safe-mascot-wrap img {
@@ -2298,7 +2350,7 @@ body {
 }
 
 .expense-item {
-  background: rgba(255, 254, 250, 0.72);
+  background: rgba(255, 254, 250, 0.88);
 }
 
 @media (max-width: 900px) {
@@ -2704,7 +2756,19 @@ body {
   }
 
   .safe-card-footer {
-    padding-right: 100px;
+    padding-right: 0 !important;
+  }
+
+  .safe-card-topline {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+  }
+
+  .safe-pocket {
+    border-radius: 14px !important;
+    padding: 6px 12px !important;
   }
 
   .safe-mascot-wrap {
@@ -4120,9 +4184,7 @@ h1, h2, h3, h4, h5, h6, .safe-amount, .page-header h1, .modal-title {
 
 /* 5. Mascot Spacing Protection on Mobile */
 @media (max-width: 959.98px) {
-  .safe-content {
-    max-width: 62% !important;
-  }
+  /* Handled by standard layout and mobile padding overrides */
 }
 
 /* 6. Horizontal Scroll Fade Mask */
