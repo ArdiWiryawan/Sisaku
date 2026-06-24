@@ -47,7 +47,7 @@ export function PocketForm({ initialPocket, submitLabel, onSubmit, onCancel }: P
     setError(null);
 
     if (!name.trim()) {
-      setError("Beri nama pocket agar mudah dikenali.");
+      setError("Beri nama rencana agar mudah dikenali.");
       return;
     }
 
@@ -74,7 +74,7 @@ export function PocketForm({ initialPocket, submitLabel, onSubmit, onCancel }: P
   return (
     <form className="stack-form" onSubmit={handleSubmit}>
       <div className="field">
-        <label htmlFor="pocket-name">Nama pocket</label>
+        <label htmlFor="pocket-name">Nama rencana</label>
         <input id="pocket-name" value={name} onChange={(event) => setName(event.target.value)} placeholder="Misal: Uang Minggu Ini" />
       </div>
 
@@ -125,7 +125,7 @@ export function PocketForm({ initialPocket, submitLabel, onSubmit, onCancel }: P
       )}
 
       <div className="field">
-        <label htmlFor="pocket-type">Tujuan pocket</label>
+        <label htmlFor="pocket-type">Tujuan rencana</label>
         <select id="pocket-type" value={type} onChange={(event) => setType(event.target.value as PocketType)}>
           <option value="general">Kebutuhan umum</option>
           <option value="food">Uang makan</option>

@@ -2,12 +2,14 @@ import { Bell, Plus, ShieldCheck, Wallet } from "lucide-react";
 import { EmptyState } from "../components/EmptyState";
 import { ExpenseItem } from "../components/ExpenseItem";
 import { GamificationPanel } from "../components/GamificationPanel";
+import { IncomeItem } from "../components/IncomeItem";
 import { InsightCard } from "../components/InsightCard";
+import { LeakInsightCard } from "../components/LeakInsightCard";
 import { MascotCoach } from "../components/MascotCoach";
 import { QuickAddChips } from "../components/QuickAddChips";
 import { RecoveryBanner } from "../components/RecoveryBanner";
 import { SafeNumberCard } from "../components/SafeNumberCard";
-import type { Category, Expense, Pocket, QuickAddTemplate } from "../types";
+import type { Category, Expense, Income, Pocket, QuickAddTemplate } from "../types";
 import { calculatePocketSummary } from "../utils/budgeting";
 import { formatRupiah } from "../utils/currency";
 import { getGamificationStats } from "../utils/gamification";
@@ -15,39 +17,49 @@ import { getGamificationStats } from "../utils/gamification";
 type HomePageProps = {
   activePocket: Pocket | null;
   expenses: Expense[];
+  incomes: Income[];
   categories: Category[];
   pockets: Pocket[];
   quickAddTemplates: QuickAddTemplate[];
   userName?: string;
   onSetActivePocket: (id: string) => void;
   onAddExpense: () => void;
+  onAddIncome: () => void;
   onCreatePocket: () => void;
   onQuickAdd: (template: QuickAddTemplate) => void;
+  onSaveQuickAddTemplate: (input: Omit<QuickAddTemplate, "id" | "createdAt"> & { id?: string }) => void;
+  onDeleteQuickAddTemplate: (id: string) => void;
   onEditExpense: (expense: Expense) => void;
   onDeleteExpense: (expense: Expense) => void;
+  onDeleteIncome: (income: Income) => void;
 };
 
 export function HomePage({
   activePocket,
   expenses,
+  incomes,
   categories,
   pockets,
   quickAddTemplates,
   userName = "Dika Pratama",
   onSetActivePocket,
   onAddExpense,
+  onAddIncome,
   onCreatePocket,
   onQuickAdd,
+  onSaveQuickAddTemplate,
+  onDeleteQuickAddTemplate,
   onEditExpense,
   onDeleteExpense,
+  onDeleteIncome,
 }: HomePageProps) {
   if (!activePocket) {
     return (
       <div className="page narrow-page">
         <EmptyState
           title="Belum ada pocket"
-          body="Buat pocket dulu. Setelah itu SisaKu akan hitung batas aman yang bisa kamu pakai setiap hari."
-          actionLabel="+ Buat pocket"
+          body="Buat rencana uang dulu. Setelah itu SisaKu akan hitung batas aman yang bisa kamu pakai setiap hari."
+          actionLabel="+ Buat rencana"
           onAction={onCreatePocket}
         />
       </div>
@@ -55,9 +67,13 @@ export function HomePage({
   }
 
   const activeExpenses = expenses.filter((expense) => expense.pocketId === activePocket.id && !expense.deletedAt);
-  const summary = calculatePocketSummary(activePocket, expenses);
+  const activeIncomes = incomes.filter((income) => income.pocketId === activePocket.id && !income.deletedAt);
+  const summary = calculatePocketSummary(activePocket, expenses, incomes);
   const categoryById = new Map(categories.map((category) => [category.id, category.name]));
-  const recentExpenses = [...activeExpenses].sort((a, b) => `${b.date}${b.createdAt}`.localeCompare(`${a.date}${a.createdAt}`)).slice(0, 5);
+  const recentEntries = [
+    ...activeExpenses.map((expense) => ({ type: "expense" as const, date: expense.date, createdAt: expense.createdAt, item: expense })),
+    ...activeIncomes.map((income) => ({ type: "income" as const, date: income.date, createdAt: income.createdAt, item: income })),
+  ].sort((a, b) => `${b.date}${b.createdAt}`.localeCompare(`${a.date}${a.createdAt}`)).slice(0, 5);
   const gameStats = getGamificationStats(expenses.filter(e => !e.deletedAt), categories, summary, pockets, activePocket);
 
   // Dynamic values for the daily mission progress
@@ -100,7 +116,7 @@ export function HomePage({
 
       {/* 2. Mockup Active Pocket Selector */}
       <section className="mobile-pocket-selector" aria-label="Pemilih pocket aktif">
-        <span className="pocket-sel-label">Pocket aktif</span>
+        <span className="pocket-sel-label">Rencana aktif</span>
         <div className="pocket-sel-pill">
           <Wallet size={14} className="pocket-sel-icon" aria-hidden="true" />
           <select
@@ -134,7 +150,7 @@ export function HomePage({
       <div className="dashboard-grid">
         <div className="dashboard-main">
           {/* Main Safe-To-Spend Card */}
-          <SafeNumberCard pocket={activePocket} summary={summary} />
+          <SafeNumberCard pocket={activePocket} summary={summary} onAddIncome={onAddIncome} />
 
           {/* 3. Redesigned 2-column grid for Sisa Uang & Sisa Hari to match mockup */}
           <section className="summary-cards-grid" aria-label="Ringkasan keuangan">
@@ -146,18 +162,30 @@ export function HomePage({
               <span className="summary-card-label">Sisa hari</span>
               <strong className="summary-card-value">{summary.remainingDays} hari</strong>
             </div>
+            <div className="summary-card-item">
+              <span className="summary-card-label">Uang masuk</span>
+              <strong className="summary-card-value">{formatRupiah(summary.totalIncome)}</strong>
+            </div>
           </section>
 
           {summary.recoveryMessage ? <RecoveryBanner message={summary.recoveryMessage} /> : null}
 
           {/* Quick Add template section */}
-          <QuickAddChips templates={quickAddTemplates} categories={categories} onSelect={onQuickAdd} />
+          <QuickAddChips
+            templates={quickAddTemplates}
+            categories={categories}
+            pockets={pockets}
+            onSelect={onQuickAdd}
+            onSaveTemplate={onSaveQuickAddTemplate}
+            onDeleteTemplate={onDeleteQuickAddTemplate}
+          />
           
           <GamificationPanel stats={gameStats} />
         </div>
 
         <aside className="dashboard-side">
           <InsightCard expenses={activeExpenses} categories={categories} summary={summary} />
+          <LeakInsightCard expenses={activeExpenses} categories={categories} />
 
           {/* 4. Mockup dynamic mission card */}
           <section className="card mission-tracker-card">
@@ -197,18 +225,27 @@ export function HomePage({
               <h2>Catatan terbaru</h2>
               <span>{summary.paceMessage}</span>
             </div>
-            {recentExpenses.length ? (
+            {recentEntries.length ? (
               <div className="expense-list compact-list">
-                {recentExpenses.map((expense) => (
-                  <ExpenseItem
-                    key={expense.id}
-                    expense={expense}
-                    categoryName={categoryById.get(expense.categoryId) ?? "Lainnya"}
-                    pocketName={activePocket.name}
-                    onEdit={() => onEditExpense(expense)}
-                    onDelete={() => onDeleteExpense(expense)}
-                  />
-                ))}
+                {recentEntries.map((entry) =>
+                  entry.type === "expense" ? (
+                    <ExpenseItem
+                      key={entry.item.id}
+                      expense={entry.item}
+                      categoryName={categoryById.get(entry.item.categoryId) ?? "Lainnya"}
+                      pocketName={activePocket.name}
+                      onEdit={() => onEditExpense(entry.item)}
+                      onDelete={() => onDeleteExpense(entry.item)}
+                    />
+                  ) : (
+                    <IncomeItem
+                      key={entry.item.id}
+                      income={entry.item}
+                      pocketName={activePocket.name}
+                      onDelete={() => onDeleteIncome(entry.item)}
+                    />
+                  )
+                )}
               </div>
             ) : (
               <EmptyState

@@ -57,7 +57,7 @@ export function PocketCard({ pocket, summary, isActive, onOpen, onSetActive }: P
                 e.stopPropagation(); // prevent opening details
                 onSetActive();
               }}
-              title="Jadikan pocket aktif"
+              title="Jadikan rencana aktif"
             >
               Jadikan aktif
             </button>
@@ -69,9 +69,7 @@ export function PocketCard({ pocket, summary, isActive, onOpen, onSetActive }: P
       </div>
 
       <div className="pocket-v2-body">
-        <div className="pocket-v2-amount">
-          {formatRupiah(pocket.totalBudget)}
-        </div>
+        <div className="pocket-v2-amount">{formatRupiah(summary.totalAvailable)}</div>
         <div className="pocket-v2-meta">
           <span>Sisa {formatRupiah(summary.remainingMoney)}</span>
           <span className="dot-separator">•</span>

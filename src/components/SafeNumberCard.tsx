@@ -1,4 +1,4 @@
-import { ShieldCheck, Wallet } from "lucide-react";
+import { Plus, ShieldCheck, Wallet } from "lucide-react";
 import type { Pocket, PocketSummary } from "../types";
 import { formatRupiah, formatRupiahAbs } from "../utils/currency";
 import { formatDateLabel } from "../utils/date";
@@ -7,9 +7,10 @@ import { StatusPill } from "./StatusPill";
 type SafeNumberCardProps = {
   pocket: Pocket;
   summary: PocketSummary;
+  onAddIncome?: () => void;
 };
 
-export function SafeNumberCard({ pocket, summary }: SafeNumberCardProps) {
+export function SafeNumberCard({ pocket, summary, onAddIncome }: SafeNumberCardProps) {
   const safeLabel =
     summary.safePerDay > 0
       ? formatRupiah(summary.safePerDay)
@@ -43,8 +44,15 @@ export function SafeNumberCard({ pocket, summary }: SafeNumberCardProps) {
         </p>
         <div className="safe-card-footer">
           <span>{formatRupiah(summary.remainingMoney)} tersisa</span>
+          {summary.totalIncome > 0 ? <span>{formatRupiah(summary.totalIncome)} uang masuk</span> : null}
           <span>{summary.spentToday > 0 ? `${formatRupiah(summary.spentToday)} tercatat hari ini` : "Belum ada pengeluaran hari ini"}</span>
         </div>
+        {onAddIncome ? (
+          <button className="btn btn-secondary safe-income-btn" type="button" onClick={onAddIncome}>
+            <Plus size={16} aria-hidden="true" />
+            Uang masuk
+          </button>
+        ) : null}
       </div>
       <div className="safe-mascot-wrap" aria-hidden="true">
         <img src="/assets/kiko-mascot.png" alt="" />

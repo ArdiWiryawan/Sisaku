@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { DEFAULT_SETTINGS } from "../data/defaults";
 import { loadStoredState, saveStoredState } from "../storage/localStorageAdapter";
-import type { AppSettings, Expense, ExpenseInput, Pocket, PocketInput } from "../types";
+import type { AppSettings, Expense, ExpenseInput, Income, IncomeInput, Pocket, PocketInput, QuickAddTemplate } from "../types";
 
 function createId(prefix: string): string {
   if (crypto.randomUUID) {
@@ -15,6 +15,7 @@ export function useLocalAppState() {
   const [initialState] = useState(loadStoredState);
   const [pockets, setPockets] = useState(initialState.pockets);
   const [expenses, setExpenses] = useState(initialState.expenses);
+  const [incomes, setIncomes] = useState(initialState.incomes);
   const [categories, setCategories] = useState(initialState.categories);
   const [quickAddTemplates, setQuickAddTemplates] = useState(initialState.quickAddTemplates);
   const [settings, setSettings] = useState<AppSettings>({
@@ -25,12 +26,12 @@ export function useLocalAppState() {
 
   useEffect(() => {
     try {
-      saveStoredState({ pockets, expenses, categories, quickAddTemplates, settings });
+      saveStoredState({ pockets, expenses, incomes, categories, quickAddTemplates, settings });
       setStorageError(null);
     } catch {
       setStorageError("Data tidak bisa disimpan di perangkat ini. Coba cek mode private/incognito atau ruang penyimpanan browser.");
     }
-  }, [pockets, expenses, categories, quickAddTemplates, settings]);
+  }, [pockets, expenses, incomes, categories, quickAddTemplates, settings]);
 
   const activePocketId = useMemo(() => {
     if (settings.defaultPocketId && pockets.some((pocket) => pocket.id === settings.defaultPocketId)) {
@@ -79,6 +80,7 @@ export function useLocalAppState() {
   function deletePocket(id: string): void {
     setPockets((current) => current.filter((pocket) => pocket.id !== id));
     setExpenses((current) => current.filter((expense) => expense.pocketId !== id));
+    setIncomes((current) => current.filter((income) => income.pocketId !== id));
     setSettings((current) => {
       if (current.defaultPocketId !== id) {
         return current;
@@ -133,6 +135,65 @@ export function useLocalAppState() {
     setExpenses((current) => current.filter((expense) => expense.id !== id));
   }
 
+  function createIncome(input: IncomeInput): Income {
+    const now = new Date().toISOString();
+    const income: Income = {
+      id: createId("income"),
+      ...input,
+      createdAt: now,
+      updatedAt: now,
+      deletedAt: null,
+    };
+
+    setIncomes((current) => [...current, income]);
+    return income;
+  }
+
+  function updateIncome(id: string, input: IncomeInput): void {
+    setIncomes((current) =>
+      current.map((income) =>
+        income.id === id
+          ? {
+              ...income,
+              ...input,
+              updatedAt: new Date().toISOString(),
+            }
+          : income
+      )
+    );
+  }
+
+  function deleteIncome(id: string): void {
+    setIncomes((current) => current.filter((income) => income.id !== id));
+  }
+
+  function upsertQuickAddTemplate(input: Omit<QuickAddTemplate, "id" | "createdAt"> & { id?: string }): QuickAddTemplate {
+    const now = new Date().toISOString();
+    const template: QuickAddTemplate = {
+      id: input.id ?? createId("quick"),
+      label: input.label,
+      amount: input.amount,
+      categoryId: input.categoryId,
+      pocketId: input.pocketId,
+      isActive: input.isActive,
+      createdAt: input.id ? quickAddTemplates.find((item) => item.id === input.id)?.createdAt ?? now : now,
+    };
+
+    setQuickAddTemplates((current) => {
+      if (input.id && current.some((item) => item.id === input.id)) {
+        return current.map((item) => (item.id === input.id ? template : item));
+      }
+
+      return [...current, template];
+    });
+
+    return template;
+  }
+
+  function deleteQuickAddTemplate(id: string): void {
+    setQuickAddTemplates((current) => current.filter((template) => template.id !== id));
+  }
+
   function updateSettings(nextSettings: Partial<AppSettings>): void {
     setSettings((current) => ({
       ...current,
@@ -143,6 +204,7 @@ export function useLocalAppState() {
   function resetAllData(): void {
     setPockets([]);
     setExpenses([]);
+    setIncomes([]);
     setCategories(initialState.categories);
     setQuickAddTemplates(initialState.quickAddTemplates);
     setSettings({
@@ -154,6 +216,7 @@ export function useLocalAppState() {
   return {
     pockets,
     expenses,
+    incomes,
     categories,
     quickAddTemplates,
     settings,
@@ -167,7 +230,32 @@ export function useLocalAppState() {
     createExpense,
     updateExpense,
     deleteExpense,
+    createIncome,
+    updateIncome,
+    deleteIncome,
+    upsertQuickAddTemplate,
+    deleteQuickAddTemplate,
     updateSettings,
     resetAllData,
+    restoreData: (nextState: {
+      pockets: Pocket[];
+      expenses: Expense[];
+      incomes: Income[];
+      categories: typeof categories;
+      quickAddTemplates: QuickAddTemplate[];
+      settings: AppSettings;
+    }) => {
+      setPockets(nextState.pockets);
+      setExpenses(nextState.expenses);
+      setIncomes(nextState.incomes);
+      setCategories(nextState.categories);
+      setQuickAddTemplates(nextState.quickAddTemplates);
+      setSettings({
+        ...DEFAULT_SETTINGS,
+        ...nextState.settings,
+        hasCompletedOnboarding: nextState.pockets.length > 0,
+        lastOpenedAt: new Date().toISOString(),
+      });
+    },
   };
 }

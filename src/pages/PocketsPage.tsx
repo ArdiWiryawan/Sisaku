@@ -2,13 +2,14 @@ import { CalendarDays, Pencil, Plus, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { EmptyState } from "../components/EmptyState";
 import { ExpenseItem } from "../components/ExpenseItem";
+import { IncomeItem } from "../components/IncomeItem";
 import { Modal } from "../components/Modal";
 import { PocketCard } from "../components/PocketCard";
 import { PocketForm } from "../components/PocketForm";
 import { ProgressBars } from "../components/ProgressBars";
 import { RecoveryBanner } from "../components/RecoveryBanner";
 import { StatusPill } from "../components/StatusPill";
-import type { Category, Expense, Pocket, PocketInput } from "../types";
+import type { Category, Expense, Income, Pocket, PocketInput } from "../types";
 import { calculatePocketSummary } from "../utils/budgeting";
 import { formatRupiah } from "../utils/currency";
 import { formatDateLabel } from "../utils/date";
@@ -16,6 +17,7 @@ import { formatDateLabel } from "../utils/date";
 type PocketsPageProps = {
   pockets: Pocket[];
   expenses: Expense[];
+  incomes: Income[];
   categories: Category[];
   activePocketId: string | null;
   onCreatePocket: (input: PocketInput) => void;
@@ -24,11 +26,14 @@ type PocketsPageProps = {
   onSetActivePocket: (id: string) => void;
   onEditExpense: (expense: Expense) => void;
   onDeleteExpense: (expense: Expense) => void;
+  onAddIncome: () => void;
+  onDeleteIncome: (income: Income) => void;
 };
 
 export function PocketsPage({
   pockets,
   expenses,
+  incomes,
   categories,
   activePocketId,
   onCreatePocket,
@@ -37,6 +42,8 @@ export function PocketsPage({
   onSetActivePocket,
   onEditExpense,
   onDeleteExpense,
+  onAddIncome,
+  onDeleteIncome,
 }: PocketsPageProps) {
   const [selectedPocketId, setSelectedPocketId] = useState<string | null>(activePocketId ?? pockets[0]?.id ?? null);
   const [formMode, setFormMode] = useState<"create" | "edit" | null>(null);
@@ -53,12 +60,21 @@ export function PocketsPage({
   }, [activePocketId, pockets, selectedPocketId]);
 
   const selectedPocket = useMemo(() => pockets.find((pocket) => pocket.id === selectedPocketId) ?? null, [pockets, selectedPocketId]);
-  const selectedSummary = selectedPocket ? calculatePocketSummary(selectedPocket, expenses) : null;
+  const selectedSummary = selectedPocket ? calculatePocketSummary(selectedPocket, expenses, incomes) : null;
   const selectedExpenses = selectedPocket
     ? expenses
         .filter((expense) => expense.pocketId === selectedPocket.id && !expense.deletedAt)
         .sort((a, b) => `${b.date}${b.createdAt}`.localeCompare(`${a.date}${a.createdAt}`))
     : [];
+  const selectedIncomes = selectedPocket
+    ? incomes
+        .filter((income) => income.pocketId === selectedPocket.id && !income.deletedAt)
+        .sort((a, b) => `${b.date}${b.createdAt}`.localeCompare(`${a.date}${a.createdAt}`))
+    : [];
+  const selectedEntries = [
+    ...selectedExpenses.map((expense) => ({ type: "expense" as const, date: expense.date, createdAt: expense.createdAt, item: expense })),
+    ...selectedIncomes.map((income) => ({ type: "income" as const, date: income.date, createdAt: income.createdAt, item: income })),
+  ].sort((a, b) => `${b.date}${b.createdAt}`.localeCompare(`${a.date}${a.createdAt}`));
   const categoryById = new Map(categories.map((category) => [category.id, category.name]));
 
   function handleSubmitPocket(input: PocketInput) {
@@ -87,7 +103,7 @@ export function PocketsPage({
       <div className="pocket-detail-inner-scroll">
         <div className="card-header-row">
           <div>
-            <p className="eyebrow">Detail pocket</p>
+            <p className="eyebrow">Detail rencana</p>
             <h2 id="pocket-detail-title">{selectedPocket.name}</h2>
           </div>
           <StatusPill status={selectedSummary.status} />
@@ -97,6 +113,10 @@ export function PocketsPage({
           <div>
             <span>Budget awal</span>
             <strong>{formatRupiah(selectedPocket.totalBudget)}</strong>
+          </div>
+          <div>
+            <span>Uang masuk</span>
+            <strong>{formatRupiah(selectedSummary.totalIncome)}</strong>
           </div>
           <div>
             <span>Total terpakai</span>
@@ -125,7 +145,11 @@ export function PocketsPage({
         <div className="card-actions strong-actions">
           <button className="btn btn-secondary" type="button" onClick={() => setFormMode("edit")}>
             <Pencil size={16} aria-hidden="true" />
-            Edit pocket
+            Edit rencana
+          </button>
+          <button className="btn btn-secondary" type="button" onClick={onAddIncome}>
+            <Plus size={16} aria-hidden="true" />
+            Uang masuk
           </button>
           <button
             className="btn btn-danger"
@@ -141,24 +165,33 @@ export function PocketsPage({
         </div>
 
         <div className="section-heading with-top-border">
-          <h3>Catatan di pocket ini</h3>
-          <span>{selectedExpenses.length} transaksi</span>
+          <h3>Catatan di rencana ini</h3>
+          <span>{selectedEntries.length} catatan</span>
         </div>
-        {selectedExpenses.length ? (
+        {selectedEntries.length ? (
           <div className="expense-list">
-            {selectedExpenses.slice(0, 8).map((expense) => (
-              <ExpenseItem
-                key={expense.id}
-                expense={expense}
-                categoryName={categoryById.get(expense.categoryId) ?? "Lainnya"}
-                pocketName={selectedPocket.name}
-                onEdit={() => onEditExpense(expense)}
-                onDelete={() => onDeleteExpense(expense)}
-              />
-            ))}
+            {selectedEntries.slice(0, 8).map((entry) =>
+              entry.type === "expense" ? (
+                <ExpenseItem
+                  key={entry.item.id}
+                  expense={entry.item}
+                  categoryName={categoryById.get(entry.item.categoryId) ?? "Lainnya"}
+                  pocketName={selectedPocket.name}
+                  onEdit={() => onEditExpense(entry.item)}
+                  onDelete={() => onDeleteExpense(entry.item)}
+                />
+              ) : (
+                <IncomeItem
+                  key={entry.item.id}
+                  income={entry.item}
+                  pocketName={selectedPocket.name}
+                  onDelete={() => onDeleteIncome(entry.item)}
+                />
+              )
+            )}
           </div>
         ) : (
-          <EmptyState title="Belum ada pengeluaran" body="Setelah kamu mencatat transaksi ke pocket ini, riwayatnya akan muncul di sini." />
+          <EmptyState title="Belum ada catatan" body="Setelah kamu mencatat pengeluaran atau uang masuk ke rencana ini, riwayatnya akan muncul di sini." />
         )}
       </div>
     );
@@ -168,12 +201,12 @@ export function PocketsPage({
     <div className="page pockets-page">
       {/* Custom Mobile Header */}
       <section className="page-header mobile-header-pockets">
-        <h1>Pocket</h1>
+        <h1>Rencana</h1>
         <button
           className="mobile-header-plus-btn"
           type="button"
           onClick={() => setFormMode("create")}
-          aria-label="Buat pocket baru"
+          aria-label="Buat rencana uang baru"
         >
           <Plus size={20} aria-hidden="true" />
         </button>
@@ -182,31 +215,31 @@ export function PocketsPage({
       {/* Desktop Page Header */}
       <section className="page-header desktop-only-header">
         <div>
-          <p className="eyebrow">Pocket</p>
+          <p className="eyebrow">Rencana uang</p>
           <h1>Bagi uangmu jadi rencana yang jelas.</h1>
         </div>
         <button className="btn btn-primary" type="button" onClick={() => setFormMode("create")}>
           <Plus size={18} aria-hidden="true" />
-          Buat pocket
+          Buat rencana
         </button>
       </section>
 
       {!pockets.length ? (
         <EmptyState
-          title="Belum ada pocket"
-          body="Mulai dari pocket sederhana, misalnya uang minggu ini, uang makan, atau transport."
-          actionLabel="+ Buat pocket"
+          title="Belum ada rencana uang"
+          body="Mulai dari rencana sederhana, misalnya uang minggu ini, uang makan, atau transport."
+          actionLabel="+ Buat rencana"
           onAction={() => setFormMode("create")}
         />
       ) : (
         <div className="pockets-layout">
           <div className="pocket-list-wrap">
-            <section className="pocket-list" aria-label="Daftar pocket">
+            <section className="pocket-list" aria-label="Daftar rencana uang">
               {pockets.map((pocket) => (
                 <PocketCard
                   key={pocket.id}
                   pocket={pocket}
-                  summary={calculatePocketSummary(pocket, expenses)}
+                  summary={calculatePocketSummary(pocket, expenses, incomes)}
                   isActive={pocket.id === activePocketId}
                   onOpen={() => handleOpenPocketCard(pocket.id)}
                   onSetActive={() => onSetActivePocket(pocket.id)}
@@ -218,7 +251,7 @@ export function PocketsPage({
             <div className="pocket-mascot-coach-callout">
               <img src="/assets/kiko-mascot.png" alt="Kiko" />
               <div className="pocket-mascot-bubble">
-                <h3>Mau pocket barumu makin semangat?</h3>
+                <h3>Mau rencana barumu makin semangat?</h3>
                 <p>Beri nama & target belanja yang jelas ya!</p>
               </div>
             </div>
@@ -234,13 +267,13 @@ export function PocketsPage({
       )}
 
       {/* Mobile details Modal */}
-      <Modal title="Detail Pocket" open={mobileDetailOpen} onClose={() => setMobileDetailOpen(false)}>
+      <Modal title="Detail rencana" open={mobileDetailOpen} onClose={() => setMobileDetailOpen(false)}>
         <div className="mobile-detail-modal-wrap">
           {renderDetailContent()}
         </div>
       </Modal>
 
-      <Modal title={formMode === "edit" ? "Edit pocket" : "Buat pocket baru"} open={formMode !== null} onClose={() => setFormMode(null)}>
+      <Modal title={formMode === "edit" ? "Edit rencana" : "Buat rencana uang"} open={formMode !== null} onClose={() => setFormMode(null)}>
         <PocketForm
           initialPocket={formMode === "edit" ? selectedPocket : null}
           submitLabel={formMode === "edit" ? "Simpan perubahan" : "Hitung batas aman"}

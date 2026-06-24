@@ -1,4 +1,4 @@
-import type { BudgetStatus, Expense, Pocket, PocketSummary } from "../types";
+import type { BudgetStatus, Expense, Income, Pocket, PocketSummary } from "../types";
 import { formatRupiah, formatRupiahAbs } from "./currency";
 import { diffDays, getTodayISO } from "./date";
 
@@ -82,26 +82,31 @@ function getRecoveryMessage(summary: Omit<PocketSummary, "status" | "statusMessa
   return null;
 }
 
-export function calculatePocketSummary(pocket: Pocket, expenses: Expense[], todayISO = getTodayISO()): PocketSummary {
+export function calculatePocketSummary(pocket: Pocket, expenses: Expense[], incomesOrTodayISO: Income[] | string = [], todayISO = getTodayISO()): PocketSummary {
+  const incomes = Array.isArray(incomesOrTodayISO) ? incomesOrTodayISO : [];
+  const effectiveTodayISO = typeof incomesOrTodayISO === "string" ? incomesOrTodayISO : todayISO;
   const totalDays = Math.max(diffDays(pocket.endDate, pocket.startDate) + 1, 1);
 
-  const isBeforeStart = diffDays(todayISO, pocket.startDate) < 0;
-  const isAfterEnd = diffDays(todayISO, pocket.endDate) > 0;
+  const isBeforeStart = diffDays(effectiveTodayISO, pocket.startDate) < 0;
+  const isAfterEnd = diffDays(effectiveTodayISO, pocket.endDate) > 0;
 
-  const remainingDays = isBeforeStart ? totalDays : isAfterEnd ? 0 : Math.max(diffDays(pocket.endDate, todayISO) + 1, 0);
-  const elapsedDays = isBeforeStart ? 0 : isAfterEnd ? totalDays : clamp(diffDays(todayISO, pocket.startDate) + 1, 0, totalDays);
+  const remainingDays = isBeforeStart ? totalDays : isAfterEnd ? 0 : Math.max(diffDays(pocket.endDate, effectiveTodayISO) + 1, 0);
+  const elapsedDays = isBeforeStart ? 0 : isAfterEnd ? totalDays : clamp(diffDays(effectiveTodayISO, pocket.startDate) + 1, 0, totalDays);
 
   const pocketExpenses = expenses.filter((expense) => expense.pocketId === pocket.id && !expense.deletedAt);
+  const pocketIncomes = incomes.filter((income) => income.pocketId === pocket.id && !income.deletedAt);
+  const totalIncome = pocketIncomes.reduce((sum, income) => sum + income.amount, 0);
+  const totalAvailable = pocket.totalBudget + totalIncome;
   const totalSpent = pocketExpenses.reduce((sum, expense) => sum + expense.amount, 0);
-  const spentToday = pocketExpenses.filter((expense) => expense.date === todayISO).reduce((sum, expense) => sum + expense.amount, 0);
-  const remainingMoney = pocket.totalBudget - totalSpent;
-  const initialSafePerDay = pocket.totalBudget / totalDays;
+  const spentToday = pocketExpenses.filter((expense) => expense.date === effectiveTodayISO).reduce((sum, expense) => sum + expense.amount, 0);
+  const remainingMoney = totalAvailable - totalSpent;
+  const initialSafePerDay = totalAvailable / totalDays;
 
   // New Safe-to-Spend Today Logic
   const todayAllowance = remainingDays > 0 ? (remainingMoney + spentToday) / remainingDays : 0;
   const safePerDay = remainingDays > 0 ? todayAllowance - spentToday : remainingMoney;
 
-  const moneyUsedPercent = pocket.totalBudget > 0 ? clamp((totalSpent / pocket.totalBudget) * 100, 0, 999) : 0;
+  const moneyUsedPercent = totalAvailable > 0 ? clamp((totalSpent / totalAvailable) * 100, 0, 999) : 0;
   const timeElapsedPercent = totalDays > 0 ? clamp((elapsedDays / totalDays) * 100, 0, 100) : 0;
   const paceDifference = moneyUsedPercent - timeElapsedPercent;
 
@@ -109,6 +114,8 @@ export function calculatePocketSummary(pocket: Pocket, expenses: Expense[], toda
     totalDays,
     elapsedDays,
     remainingDays,
+    totalIncome,
+    totalAvailable,
     totalSpent,
     spentToday,
     remainingMoney,

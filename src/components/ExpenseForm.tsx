@@ -58,7 +58,7 @@ export function ExpenseForm({ pockets, categories, activePocketId, initialExpens
     }
 
     if (!pocketId) {
-      setError("Pilih pocket tempat pengeluaran ini dicatat.");
+      setError("Pilih rencana uang tempat pengeluaran ini dicatat.");
       return;
     }
 
@@ -75,8 +75,8 @@ export function ExpenseForm({ pockets, categories, activePocketId, initialExpens
   if (!pockets.length) {
     return (
       <div className="empty-state compact">
-        <h2>Belum ada pocket</h2>
-        <p>Buat pocket dulu agar setiap pengeluaran punya tujuan yang jelas.</p>
+        <h2>Belum ada rencana uang</h2>
+        <p>Buat rencana uang dulu agar setiap pengeluaran punya tujuan yang jelas.</p>
         <button className="btn btn-secondary" type="button" onClick={onCancel}>
           Tutup
         </button>
@@ -138,7 +138,7 @@ export function ExpenseForm({ pockets, categories, activePocketId, initialExpens
       </fieldset>
 
       <div className="field">
-        <label htmlFor="expense-pocket">Catat ke pocket</label>
+        <label htmlFor="expense-pocket">Masukkan ke rencana</label>
         <select id="expense-pocket" value={pocketId} onChange={(event) => setPocketId(event.target.value)}>
           {pockets.map((pocket) => (
             <option key={pocket.id} value={pocket.id}>

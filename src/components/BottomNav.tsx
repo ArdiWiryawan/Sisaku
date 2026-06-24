@@ -3,7 +3,7 @@ import type { AppTab } from "../types";
 
 const navItems = [
   { id: "home", label: "Home", icon: Home },
-  { id: "pockets", label: "Pocket", icon: WalletCards },
+  { id: "pockets", label: "Rencana", icon: WalletCards },
   { id: "history", label: "Riwayat", icon: History },
   { id: "settings", label: "Saya", icon: UserRound },
 ] satisfies { id: AppTab; label: string; icon: typeof Home }[];

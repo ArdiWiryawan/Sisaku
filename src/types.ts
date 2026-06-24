@@ -30,6 +30,18 @@ export type Expense = {
   deletedAt: string | null;
 };
 
+export type Income = {
+  id: string;
+  pocketId: string;
+  amount: number;
+  title: string;
+  date: string;
+  note: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+};
+
 export type Category = {
   id: string;
   name: string;
@@ -63,6 +75,8 @@ export type PocketSummary = {
   totalDays: number;
   elapsedDays: number;
   remainingDays: number;
+  totalIncome: number;
+  totalAvailable: number;
   totalSpent: number;
   spentToday: number;
   remainingMoney: number;
@@ -91,6 +105,14 @@ export type ExpenseInput = {
   pocketId: string;
   amount: number;
   categoryId: string;
+  title: string;
+  date: string;
+  note: string;
+};
+
+export type IncomeInput = {
+  pocketId: string;
+  amount: number;
   title: string;
   date: string;
   note: string;

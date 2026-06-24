@@ -1,9 +1,10 @@
 import { DEFAULT_CATEGORIES, DEFAULT_QUICK_ADD_TEMPLATES, DEFAULT_SETTINGS } from "../data/defaults";
-import type { AppSettings, Category, Expense, Pocket, QuickAddTemplate } from "../types";
+import type { AppSettings, Category, Expense, Income, Pocket, QuickAddTemplate } from "../types";
 
 const STORAGE_KEYS = {
   pockets: "sisaku:pockets",
   expenses: "sisaku:expenses",
+  incomes: "sisaku:incomes",
   categories: "sisaku:categories",
   quickAddTemplates: "sisaku:quickAddTemplates",
   settings: "sisaku:settings",
@@ -12,6 +13,7 @@ const STORAGE_KEYS = {
 export type StoredAppState = {
   pockets: Pocket[];
   expenses: Expense[];
+  incomes: Income[];
   categories: Category[];
   quickAddTemplates: QuickAddTemplate[];
   settings: AppSettings;
@@ -34,6 +36,7 @@ export function loadStoredState(): StoredAppState {
   return {
     pockets: readJSON<StoredAppState["pockets"]>(STORAGE_KEYS.pockets, []),
     expenses: readJSON<StoredAppState["expenses"]>(STORAGE_KEYS.expenses, []),
+    incomes: readJSON<StoredAppState["incomes"]>(STORAGE_KEYS.incomes, []),
     categories: readJSON<StoredAppState["categories"]>(STORAGE_KEYS.categories, DEFAULT_CATEGORIES),
     quickAddTemplates: readJSON<StoredAppState["quickAddTemplates"]>(STORAGE_KEYS.quickAddTemplates, DEFAULT_QUICK_ADD_TEMPLATES),
     settings: {
@@ -46,6 +49,7 @@ export function loadStoredState(): StoredAppState {
 export function saveStoredState(state: StoredAppState): void {
   writeJSON(STORAGE_KEYS.pockets, state.pockets);
   writeJSON(STORAGE_KEYS.expenses, state.expenses);
+  writeJSON(STORAGE_KEYS.incomes, state.incomes);
   writeJSON(STORAGE_KEYS.categories, state.categories);
   writeJSON(STORAGE_KEYS.quickAddTemplates, state.quickAddTemplates);
   writeJSON(STORAGE_KEYS.settings, state.settings);

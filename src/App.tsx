@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { AppShell } from "./components/AppShell";
 import { ExpenseForm } from "./components/ExpenseForm";
+import { IncomeForm } from "./components/IncomeForm";
 import { Modal } from "./components/Modal";
 import { PocketForm } from "./components/PocketForm";
 import { Toast } from "./components/Toast";
@@ -10,7 +11,8 @@ import { HomePage } from "./pages/HomePage";
 import { OnboardingPage } from "./pages/OnboardingPage";
 import { PocketsPage } from "./pages/PocketsPage";
 import { SettingsPage } from "./pages/SettingsPage";
-import type { AppTab, Expense, ExpenseInput, Pocket, PocketInput, QuickAddTemplate } from "./types";
+import type { AppTab, Expense, ExpenseInput, Income, IncomeInput, Pocket, PocketInput, QuickAddTemplate } from "./types";
+import { buildBackupJSON, downloadJSON, parseBackupJSON } from "./utils/backup";
 import { calculatePocketSummary } from "./utils/budgeting";
 import { buildExpenseCSV, downloadCSV } from "./utils/csv";
 import { getTodayISO } from "./utils/date";
@@ -28,10 +30,21 @@ type ExpenseModalState =
       expense: Expense;
     };
 
+type IncomeModalState =
+  | {
+      mode: "create";
+      income?: null;
+    }
+  | {
+      mode: "edit";
+      income: Income;
+    };
+
 export default function App() {
   const store = useLocalAppState();
   const [activeTab, setActiveTab] = useState<AppTab>("home");
   const [expenseModal, setExpenseModal] = useState<ExpenseModalState | null>(null);
+  const [incomeModal, setIncomeModal] = useState<IncomeModalState | null>(null);
   const [showCreatePocket, setShowCreatePocket] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [isOffline, setIsOffline] = useState(() => (typeof navigator === "undefined" ? false : !navigator.onLine));
@@ -95,7 +108,7 @@ export default function App() {
       setToast("Catatan diperbarui. Batas amanmu ikut dihitung ulang.");
     } else {
       const activeExpensesBefore = store.expenses.filter((expense) => !expense.deletedAt);
-      const summaryBefore = store.activePocket ? calculatePocketSummary(store.activePocket, store.expenses) : null;
+      const summaryBefore = store.activePocket ? calculatePocketSummary(store.activePocket, store.expenses, store.incomes) : null;
       const oldStats = summaryBefore
         ? getGamificationStats(activeExpensesBefore, store.categories, summaryBefore, store.pockets, store.activePocket)
         : null;
@@ -104,7 +117,7 @@ export default function App() {
 
       if (oldStats && store.activePocket) {
         const nextExpenses = [...store.expenses, newExpense].filter((expense) => !expense.deletedAt);
-        const summaryAfter = calculatePocketSummary(store.activePocket, nextExpenses);
+        const summaryAfter = calculatePocketSummary(store.activePocket, nextExpenses, store.incomes);
         const newStats = getGamificationStats(nextExpenses, store.categories, summaryAfter, store.pockets, store.activePocket);
 
         if (newStats.level > oldStats.level) {
@@ -136,6 +149,28 @@ export default function App() {
     setToast("Catatan dihapus. Sisa aman sudah dihitung ulang.");
   }
 
+  function handleSubmitIncome(input: IncomeInput) {
+    if (incomeModal?.mode === "edit" && incomeModal.income) {
+      store.updateIncome(incomeModal.income.id, input);
+      setToast("Uang masuk diperbarui. Batas aman ikut dihitung ulang.");
+    } else {
+      store.createIncome(input);
+      setToast("Uang masuk tercatat. Batas amanmu naik.");
+    }
+
+    setIncomeModal(null);
+  }
+
+  function handleDeleteIncome(income: Income) {
+    const confirmed = window.confirm("Hapus catatan uang masuk ini? Batas aman akan dihitung ulang.");
+    if (!confirmed) {
+      return;
+    }
+
+    store.deleteIncome(income.id);
+    setToast("Uang masuk dihapus. Batas aman sudah dihitung ulang.");
+  }
+
   function handleExportCSV() {
     const exportableExpenses = store.expenses.filter((expense) => !expense.deletedAt);
 
@@ -147,6 +182,37 @@ export default function App() {
     const csv = buildExpenseCSV(exportableExpenses, store.pockets, store.categories);
     downloadCSV(csv, `sisaku-expenses-${getTodayISO()}.csv`);
     setToast("CSV siap diunduh.");
+  }
+
+  function handleExportBackup() {
+    const json = buildBackupJSON({
+      pockets: store.pockets,
+      expenses: store.expenses,
+      incomes: store.incomes,
+      categories: store.categories,
+      quickAddTemplates: store.quickAddTemplates,
+      settings: store.settings,
+    });
+
+    downloadJSON(json, `sisaku-backup-${getTodayISO()}.json`);
+    setToast("Backup JSON siap diunduh.");
+  }
+
+  async function handleImportBackup(file: File) {
+    const confirmed = window.confirm("Memulihkan backup akan mengganti semua data SisaKu di perangkat ini. Lanjut?");
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      const raw = await file.text();
+      const data = parseBackupJSON(raw);
+      store.restoreData(data);
+      setActiveTab("home");
+      setToast("Backup berhasil dipulihkan.");
+    } catch {
+      setToast("File backup tidak bisa dipulihkan.");
+    }
   }
 
   function handleResetData() {
@@ -181,16 +247,27 @@ export default function App() {
         <HomePage
           activePocket={store.activePocket}
           expenses={store.expenses}
+          incomes={store.incomes}
           categories={store.categories}
           pockets={store.pockets}
           quickAddTemplates={store.quickAddTemplates}
           userName={store.settings.userName}
           onSetActivePocket={store.setActivePocket}
           onAddExpense={() => setExpenseModal({ mode: "create", preset: null })}
+          onAddIncome={() => setIncomeModal({ mode: "create" })}
           onCreatePocket={() => setShowCreatePocket(true)}
           onQuickAdd={(template) => setExpenseModal({ mode: "create", preset: template })}
+          onSaveQuickAddTemplate={(input) => {
+            store.upsertQuickAddTemplate(input);
+            setToast("Template catat cepat disimpan.");
+          }}
+          onDeleteQuickAddTemplate={(id) => {
+            store.deleteQuickAddTemplate(id);
+            setToast("Template catat cepat dihapus.");
+          }}
           onEditExpense={(expense) => setExpenseModal({ mode: "edit", expense })}
           onDeleteExpense={handleDeleteExpense}
+          onDeleteIncome={handleDeleteIncome}
         />
       ) : null}
 
@@ -198,6 +275,7 @@ export default function App() {
         <PocketsPage
           pockets={store.pockets}
           expenses={store.expenses}
+          incomes={store.incomes}
           categories={store.categories}
           activePocketId={store.activePocketId}
           onCreatePocket={handleCreatePocket}
@@ -205,10 +283,12 @@ export default function App() {
           onDeletePocket={handleDeletePocket}
           onSetActivePocket={(id) => {
             store.setActivePocket(id);
-            setToast("Pocket aktif sudah diganti.");
+            setToast("Rencana aktif sudah diganti.");
           }}
           onEditExpense={(expense) => setExpenseModal({ mode: "edit", expense })}
           onDeleteExpense={handleDeleteExpense}
+          onAddIncome={() => setIncomeModal({ mode: "create" })}
+          onDeleteIncome={handleDeleteIncome}
         />
       ) : null}
 
@@ -227,12 +307,15 @@ export default function App() {
         <SettingsPage
           settings={store.settings}
           expenses={store.expenses}
+          incomes={store.incomes}
           pockets={store.pockets}
           categories={store.categories}
           storageError={store.storageError}
           isOffline={isOffline}
           onUpdateSettings={store.updateSettings}
           onExportCSV={handleExportCSV}
+          onExportBackup={handleExportBackup}
+          onImportBackup={handleImportBackup}
           onResetData={handleResetData}
         />
       ) : null}
@@ -254,7 +337,22 @@ export default function App() {
         />
       </Modal>
 
-      <Modal title="Buat pocket baru" open={showCreatePocket} onClose={() => setShowCreatePocket(false)}>
+      <Modal
+        title={incomeModal?.mode === "edit" ? "Edit uang masuk" : "Tambah uang masuk"}
+        open={incomeModal !== null}
+        onClose={() => setIncomeModal(null)}
+      >
+        <IncomeForm
+          pockets={store.pockets}
+          activePocketId={store.activePocketId}
+          initialIncome={incomeModal?.mode === "edit" ? incomeModal.income : null}
+          submitLabel={incomeModal?.mode === "edit" ? "Simpan perubahan" : "Simpan uang masuk"}
+          onSubmit={handleSubmitIncome}
+          onCancel={() => setIncomeModal(null)}
+        />
+      </Modal>
+
+      <Modal title="Buat rencana uang" open={showCreatePocket} onClose={() => setShowCreatePocket(false)}>
         <PocketForm submitLabel="Hitung batas aman" onSubmit={handleCreatePocket} onCancel={() => setShowCreatePocket(false)} />
       </Modal>
 

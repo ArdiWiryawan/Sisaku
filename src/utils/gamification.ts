@@ -112,8 +112,8 @@ export function getGamificationStats(
   }
   budgetPerformanceXp += Math.round(Math.max(summary.timeElapsedPercent, 0) * 2);
 
-  if (activePocket && activePocket.totalBudget > 0) {
-    const savingsPercent = Math.max(0, (summary.remainingMoney / activePocket.totalBudget) * 100);
+  if (activePocket && summary.totalAvailable > 0) {
+    const savingsPercent = Math.max(0, (summary.remainingMoney / summary.totalAvailable) * 100);
     budgetPerformanceXp += Math.round(savingsPercent * 1.5);
   }
 
