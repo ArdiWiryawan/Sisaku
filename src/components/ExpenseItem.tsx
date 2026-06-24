@@ -1,7 +1,7 @@
 import { Pencil, Trash2 } from "lucide-react";
 import type { Expense } from "../types";
 import { formatRupiah } from "../utils/currency";
-import { formatDateLabel } from "../utils/date";
+import { toLocalDate } from "../utils/date";
 
 type ExpenseItemProps = {
   expense: Expense;
@@ -11,13 +11,20 @@ type ExpenseItemProps = {
   onDelete: () => void;
 };
 
+function formatExpenseDate(dateISO: string): string {
+  return new Intl.DateTimeFormat("id-ID", {
+    day: "numeric",
+    month: "long",
+  }).format(toLocalDate(dateISO));
+}
+
 export function ExpenseItem({ expense, categoryName, pocketName, onEdit, onDelete }: ExpenseItemProps) {
   return (
     <article className="expense-item">
       <div className="expense-main">
         <strong>{expense.title || categoryName}</strong>
         <span>
-          {categoryName} / {pocketName} / {formatDateLabel(expense.date)}
+          {categoryName} : {pocketName} / {formatExpenseDate(expense.date)}
         </span>
         {expense.note ? <p>{expense.note}</p> : null}
       </div>

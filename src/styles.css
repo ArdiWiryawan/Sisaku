@@ -4252,5 +4252,421 @@ h1, h2, h3, h4, h5, h6, .safe-amount, .page-header h1, .modal-title {
   margin-top: 28px !important;
 }
 
+.safe-income-btn {
+  align-self: flex-start;
+  margin-top: 14px;
+  min-height: 38px;
+  padding-inline: 14px;
+}
 
+.income-item {
+  border-color: rgba(64, 184, 104, 0.28);
+  background: linear-gradient(135deg, rgba(219, 255, 226, 0.88), rgba(255, 255, 255, 0.92));
+}
+
+.income-item .expense-side > strong {
+  color: #238447;
+}
+
+.income-item .expense-main span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.compact-toggle {
+  margin-top: 4px;
+}
+
+.leak-insight-card {
+  margin-top: 28px !important;
+}
+
+.leak-insight-card .insight-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.dark-theme .income-item {
+  background: linear-gradient(135deg, rgba(28, 92, 50, 0.34), rgba(255, 255, 255, 0.08));
+  border-color: rgba(92, 224, 133, 0.28);
+}
+
+.dark-theme .income-item .expense-side > strong {
+  color: #8ef0a7;
+}
+
+/* Home comfort pass: tighter hierarchy, clearer wallet card, better dark mode */
+.safe-card {
+  grid-template-columns: minmax(0, 1fr) 132px !important;
+  align-items: end !important;
+  gap: 16px !important;
+  min-height: 310px !important;
+  padding: 22px !important;
+}
+
+.safe-card::before {
+  inset: 14px !important;
+  border-radius: 24px !important;
+}
+
+.safe-card::after {
+  inset: auto -8% -20% 42% !important;
+  height: 38% !important;
+}
+
+.safe-card-topline {
+  gap: 10px !important;
+  align-items: center !important;
+}
+
+.safe-pocket {
+  max-width: 100%;
+  min-height: 38px;
+  padding: 7px 12px !important;
+  border-radius: 16px !important;
+}
+
+.safe-pocket span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.safe-label {
+  margin-top: 18px !important;
+  font-size: 0.96rem !important;
+  line-height: 1.25 !important;
+}
+
+.safe-amount {
+  margin-top: 4px !important;
+  font-size: clamp(3rem, 5.2vw, 4.35rem) !important;
+  line-height: 0.96 !important;
+}
+
+.safe-status-chip {
+  width: fit-content;
+  max-width: min(100%, 330px);
+  margin-top: 12px !important;
+  padding: 9px 13px !important;
+  border-radius: 18px !important;
+  line-height: 1.25;
+}
+
+.safe-status-chip span {
+  max-width: 240px;
+}
+
+.safe-subtext {
+  max-width: 280px;
+  margin-top: 12px !important;
+  font-size: 0.94rem;
+  line-height: 1.35;
+}
+
+.safe-card-footer {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 7px !important;
+  max-width: 300px;
+  margin-top: 12px !important;
+  padding-top: 12px !important;
+  padding-right: 112px;
+  font-size: 0.88rem !important;
+  line-height: 1.3;
+}
+
+.safe-card-footer span {
+  align-items: center !important;
+  gap: 7px !important;
+}
+
+.safe-card-footer span::before {
+  width: 8px !important;
+  height: 8px !important;
+  margin-top: 0 !important;
+  border-radius: 999px !important;
+}
+
+.safe-income-btn {
+  margin-top: 12px !important;
+  min-height: 40px !important;
+  padding: 0 16px !important;
+  border-radius: 16px !important;
+}
+
+.safe-mascot-wrap {
+  align-self: end !important;
+  margin-bottom: 0 !important;
+}
+
+.safe-mascot-wrap img {
+  width: min(136px, 22vw) !important;
+  border-radius: 28px !important;
+  mix-blend-mode: normal !important;
+}
+
+.summary-cards-grid {
+  margin: 12px 0 20px !important;
+  gap: 12px !important;
+}
+
+.summary-card-item {
+  min-height: 78px;
+  padding: 14px 16px !important;
+  border-radius: 20px !important;
+}
+
+.leak-insight-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.leak-insight-card::after {
+  content: "";
+  position: absolute;
+  right: -34px;
+  top: -34px;
+  width: 116px;
+  height: 116px;
+  border-radius: 999px;
+  background: rgba(255, 210, 58, 0.18);
+  pointer-events: none;
+}
+
+.leak-insight-card .card-header-row {
+  position: relative;
+  z-index: 1;
+  align-items: flex-start;
+}
+
+.leak-insight-card h2 {
+  margin-top: 4px;
+  font-size: clamp(1.75rem, 3vw, 2.35rem);
+  line-height: 1.05;
+}
+
+.leak-subtitle {
+  max-width: 22rem;
+  margin-top: 8px;
+  color: var(--color-muted);
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.leak-meter {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid rgba(239, 205, 99, 0.78);
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgba(255, 246, 200, 0.95), rgba(234, 248, 218, 0.82));
+}
+
+.leak-meter-icon {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 16px;
+  background: #fff8d5;
+  color: #c17b08;
+}
+
+.leak-meter-copy {
+  display: grid;
+  gap: 3px;
+}
+
+.leak-meter-copy span {
+  color: var(--color-muted);
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.leak-meter-copy strong {
+  color: var(--color-text);
+  font-size: 1.35rem;
+  font-weight: 900;
+  line-height: 1.05;
+}
+
+.leak-insight-card .recommendation {
+  position: relative;
+  z-index: 1;
+  margin-top: 14px;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.dark-theme .safe-card {
+  border-color: rgba(255, 199, 44, 0.28) !important;
+  background:
+    radial-gradient(circle at 78% 20%, rgba(255, 210, 58, 0.12), transparent 9rem),
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0 2px, transparent 2px 10px),
+    linear-gradient(155deg, #352719 0%, #211913 58%, #16120f 100%) !important;
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+.dark-theme .safe-card::after {
+  background: rgba(255, 255, 255, 0.07) !important;
+}
+
+.dark-theme .safe-card .status-pill.status-bahaya {
+  background: #ffe4e6 !important;
+  color: #9f1239 !important;
+}
+
+.dark-theme .safe-card .status-pill.status-waspada {
+  background: rgba(255, 237, 179, 0.96) !important;
+  color: #9a5b05 !important;
+}
+
+.dark-theme .safe-card .status-pill.status-aman {
+  background: rgba(220, 252, 231, 0.95) !important;
+  color: #166534 !important;
+}
+
+.dark-theme .safe-pocket {
+  background: rgba(255, 210, 58, 0.12) !important;
+  color: #ffd23a !important;
+}
+
+.dark-theme .safe-status-chip {
+  background: rgba(255, 241, 242, 0.96) !important;
+  color: #be123c !important;
+}
+
+.dark-theme .safe-income-btn {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #fff7d6 !important;
+  border-color: rgba(255, 210, 58, 0.18) !important;
+}
+
+.dark-theme .summary-card-item {
+  background: rgba(255, 255, 255, 0.07) !important;
+  border-color: rgba(255, 255, 255, 0.09) !important;
+}
+
+.dark-theme .leak-insight-card {
+  background: rgba(32, 28, 24, 0.94) !important;
+}
+
+.dark-theme .leak-meter {
+  border-color: rgba(255, 210, 58, 0.16);
+  background: linear-gradient(135deg, rgba(255, 210, 58, 0.12), rgba(91, 141, 92, 0.14));
+}
+
+.dark-theme .leak-meter-icon {
+  background: rgba(255, 210, 58, 0.12);
+  color: #ffd23a;
+}
+
+@media (max-width: 959.98px) {
+  .dashboard-main {
+    gap: 0 !important;
+  }
+
+  .safe-card {
+    grid-template-columns: 1fr !important;
+    min-height: 0 !important;
+    margin-bottom: 8px !important;
+    padding: 18px !important;
+    border-radius: 28px !important;
+  }
+
+  .safe-card-topline {
+    flex-direction: row !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+  }
+
+  .safe-label {
+    margin-top: 16px !important;
+    font-size: 0.95rem !important;
+  }
+
+  .safe-amount {
+    font-size: clamp(3.05rem, 13vw, 4.05rem) !important;
+  }
+
+  .safe-status-chip {
+    max-width: 260px !important;
+    border-radius: 18px !important;
+  }
+
+  .safe-status-chip span {
+    max-width: 190px;
+  }
+
+  .safe-subtext {
+    max-width: 210px;
+    margin-top: 10px !important;
+  }
+
+  .safe-card-footer {
+    max-width: none;
+    min-height: 58px;
+    margin-top: 10px !important;
+    padding-right: 128px !important;
+  }
+
+  .safe-income-btn {
+    margin-top: 10px !important;
+  }
+
+  .safe-mascot-wrap {
+    position: absolute !important;
+    right: 18px !important;
+    bottom: 18px !important;
+  }
+
+  .safe-mascot-wrap img {
+    width: 112px !important;
+  }
+
+  .summary-cards-grid {
+    margin-top: 6px !important;
+  }
+
+  .summary-card-item {
+    min-height: 72px;
+  }
+}
+
+@media (max-width: 430px) {
+  .safe-card {
+    padding: 16px !important;
+  }
+
+  .safe-pocket {
+    max-width: 240px;
+  }
+
+  .safe-amount {
+    font-size: clamp(2.85rem, 12.6vw, 3.55rem) !important;
+  }
+
+  .safe-status-chip {
+    max-width: 235px !important;
+  }
+
+  .safe-card-footer {
+    padding-right: 118px !important;
+    font-size: 0.84rem !important;
+  }
+
+  .safe-mascot-wrap img {
+    width: 98px !important;
+  }
+
+  .leak-meter {
+    padding: 14px;
+  }
+}
 

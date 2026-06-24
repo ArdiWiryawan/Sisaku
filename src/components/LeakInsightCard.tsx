@@ -1,4 +1,4 @@
-import { Droplet } from "lucide-react";
+import { Droplet, TrendingDown } from "lucide-react";
 import type { Category, Expense } from "../types";
 import { formatRupiah } from "../utils/currency";
 import { getTodayISO, isDateInThisWeek } from "../utils/date";
@@ -61,18 +61,18 @@ export function LeakInsightCard({ expenses, categories }: LeakInsightCardProps) 
         <div>
           <p className="eyebrow">Bocor halus</p>
           <h2>{strongest.label}</h2>
+          <p className="leak-subtitle">Kecil-kecil, tapi mulai berulang minggu ini.</p>
         </div>
         <div className="icon-bubble warning">
           <Droplet size={20} aria-hidden="true" />
         </div>
       </div>
-      <div className="insight-grid">
-        <div>
-          <span>Muncul</span>
-          <strong>{strongest.count}x</strong>
+      <div className="leak-meter" aria-label={`${strongest.label} muncul ${strongest.count} kali dengan total ${formatRupiah(strongest.total)}`}>
+        <div className="leak-meter-icon" aria-hidden="true">
+          <TrendingDown size={20} />
         </div>
-        <div>
-          <span>Total</span>
+        <div className="leak-meter-copy">
+          <span>{strongest.count}x muncul</span>
           <strong>{formatRupiah(strongest.total)}</strong>
         </div>
       </div>
