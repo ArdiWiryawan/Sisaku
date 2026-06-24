@@ -85,7 +85,7 @@ export default function App() {
     store.setActivePocket(pocket.id);
     setShowCreatePocket(false);
     setActiveTab("home");
-    setToast("Pocket siap. Batas aman harianmu sudah dihitung.");
+    setToast("Rencana uang siap. Batas aman harianmu sudah dihitung.");
   }
 
   function handleOnboardingPocket(input: PocketInput) {
@@ -93,13 +93,13 @@ export default function App() {
   }
 
   function handleDeletePocket(pocket: Pocket) {
-    const confirmed = window.confirm(`Hapus pocket "${pocket.name}"? Semua catatan pengeluaran di pocket ini juga akan ikut terhapus.`);
+    const confirmed = window.confirm(`Hapus rencana "${pocket.name}"? Semua catatan pengeluaran dan uang masuk di rencana ini juga akan ikut terhapus.`);
     if (!confirmed) {
       return;
     }
 
     store.deletePocket(pocket.id);
-    setToast("Pocket sudah dihapus.");
+    setToast("Rencana uang sudah dihapus.");
   }
 
   function handleSubmitExpense(input: ExpenseInput) {

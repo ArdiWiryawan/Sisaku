@@ -13,13 +13,13 @@ export function buildExpenseCSV(expenses: Expense[], pockets: Pocket[], categori
   const pocketById = new Map(pockets.map((pocket) => [pocket.id, pocket.name]));
   const categoryById = new Map(categories.map((category) => [category.id, category.name]));
   const rows = [
-    ["Date", "Pocket", "Category", "Title", "Amount", "Note"],
+    ["Date", "Rencana", "Category", "Title", "Amount", "Note"],
     ...expenses
       .filter((expense) => !expense.deletedAt)
       .sort((a, b) => b.date.localeCompare(a.date))
       .map((expense) => [
         expense.date,
-        pocketById.get(expense.pocketId) ?? "Pocket terhapus",
+        pocketById.get(expense.pocketId) ?? "Rencana terhapus",
         categoryById.get(expense.categoryId) ?? "Lainnya",
         expense.title,
         expense.amount,

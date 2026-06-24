@@ -37,5 +37,5 @@ export const DEFAULT_SETTINGS: AppSettings = {
   lastOpenedAt: null,
   schemaVersion: CURRENT_SCHEMA_VERSION,
   userName: "Pejuang Hemat",
-  userBio: "Anak hemat masa depan cerah ✨",
+  userBio: "Anak hemat masa depan cerah",
 };

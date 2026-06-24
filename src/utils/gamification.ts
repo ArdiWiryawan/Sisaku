@@ -153,7 +153,7 @@ export function getGamificationStats(
     {
       id: "starter",
       title: "Pecah Telur",
-      description: "Pocket pertama sudah dibuat. Pola hematmu resmi dimulai.",
+      description: "Rencana uang pertama sudah dibuat. Pola hematmu resmi dimulai.",
       icon: "\u2B50",
       unlocked: pockets.length > 0,
       progress: pockets.length > 0 ? 1 : 0,
@@ -189,7 +189,7 @@ export function getGamificationStats(
     {
       id: "pocket_collector",
       title: "Jago Nge-Pos",
-      description: "Membuat minimal 3 pocket terpisah untuk alokasi dana.",
+      description: "Membuat minimal 3 rencana uang untuk alokasi berbeda.",
       icon: "\u{1F4BC}",
       unlocked: pockets.length >= 3,
       progress: Math.min(3, pockets.length),
@@ -234,7 +234,7 @@ export function getGamificationStats(
     {
       id: "waste_free",
       title: "Juara Bertahan",
-      description: "Sisa uang masih di atas 50% saat periode pocket sudah lewat 80%.",
+      description: "Sisa uang masih di atas 50% saat periode rencana sudah lewat 80%.",
       icon: "\u{1F6E1}\uFE0F",
       unlocked: hasExtremeSaving,
       progress: hasExtremeSaving ? 1 : 0,

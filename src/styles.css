@@ -4926,3 +4926,234 @@ h1, h2, h3, h4, h5, h6, .safe-amount, .page-header h1, .modal-title {
     border-radius: 20px;
   }
 }
+
+/* Compact mobile polish for the money card and weekly leak insight */
+@media (max-width: 959.98px) {
+  .safe-card {
+    width: calc(100% - 10px);
+    min-height: 0 !important;
+    margin-inline: auto;
+    padding: 16px !important;
+    border-radius: 24px !important;
+  }
+
+  .safe-card::before {
+    inset: 10px !important;
+    border-radius: 20px !important;
+  }
+
+  .safe-card::after {
+    inset: auto -8% -13% 45% !important;
+    height: 31% !important;
+  }
+
+  .safe-card-topline {
+    gap: 8px !important;
+  }
+
+  .safe-pocket {
+    max-width: 216px;
+    padding: 9px 12px !important;
+    font-size: 0.98rem !important;
+    border-radius: 16px !important;
+  }
+
+  .status-pill {
+    padding: 8px 13px !important;
+    font-size: 0.82rem !important;
+  }
+
+  .safe-label {
+    margin-top: 13px !important;
+    font-size: 0.86rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .safe-amount {
+    margin-top: 2px !important;
+    margin-bottom: 10px !important;
+    font-size: clamp(2.48rem, 11.2vw, 3.25rem) !important;
+    line-height: 0.92 !important;
+  }
+
+  .safe-status-chip {
+    max-width: 240px !important;
+    margin-top: 0 !important;
+    padding: 8px 12px !important;
+    border-radius: 16px !important;
+    font-size: 0.92rem !important;
+    line-height: 1.22 !important;
+  }
+
+  .safe-status-chip svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .safe-subtext {
+    max-width: 290px;
+    margin-top: 13px !important;
+    font-size: 0.92rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .safe-card-footer {
+    max-width: 250px;
+    min-height: 46px;
+    margin-top: 9px !important;
+    padding-top: 9px !important;
+    padding-right: 102px !important;
+    gap: 5px !important;
+    font-size: 0.78rem !important;
+    line-height: 1.2;
+  }
+
+  .safe-card-footer span::before {
+    width: 8px !important;
+    height: 8px !important;
+  }
+
+  .safe-income-btn {
+    min-height: 36px !important;
+    margin-top: 9px !important;
+    padding: 0 14px !important;
+    border-radius: 15px !important;
+    font-size: 0.92rem !important;
+  }
+
+  .safe-mascot-wrap {
+    right: 15px !important;
+    bottom: 15px !important;
+  }
+
+  .safe-mascot-wrap img {
+    width: 88px !important;
+    border-radius: 22px !important;
+  }
+
+  .summary-cards-grid {
+    margin-top: 10px !important;
+  }
+
+  .leak-insight-card {
+    overflow: hidden;
+    padding: 18px !important;
+    border-radius: 24px !important;
+  }
+
+  .leak-insight-card::after {
+    top: 12px !important;
+    right: 12px !important;
+    width: 76px !important;
+    height: 76px !important;
+    opacity: 0.54 !important;
+  }
+
+  .leak-insight-card .card-header-row {
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .leak-insight-card .eyebrow {
+    margin-top: 0 !important;
+    font-size: 0.75rem !important;
+    line-height: 1.1 !important;
+  }
+
+  .leak-insight-card h2 {
+    margin-top: 5px !important;
+    font-size: clamp(1.72rem, 8vw, 2.16rem) !important;
+    line-height: 1.04 !important;
+  }
+
+  .leak-subtitle {
+    max-width: 260px;
+    margin-top: 8px !important;
+    font-size: 0.96rem !important;
+    line-height: 1.34 !important;
+  }
+
+  .leak-insight-card .icon-bubble {
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    border-radius: 16px !important;
+  }
+
+  .leak-meter {
+    grid-template-columns: 46px minmax(0, 1fr);
+    gap: 12px;
+    margin-top: 16px !important;
+    padding: 13px !important;
+    border-radius: 20px !important;
+  }
+
+  .leak-meter-icon {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 14px !important;
+  }
+
+  .leak-meter-copy span {
+    font-size: 0.88rem !important;
+  }
+
+  .leak-meter-copy strong {
+    margin-top: 3px !important;
+    font-size: 1.28rem !important;
+    line-height: 1.1 !important;
+  }
+
+  .leak-insight-card .recommendation {
+    margin-top: 12px !important;
+    padding: 12px 13px !important;
+    border-radius: 18px !important;
+    font-size: 0.9rem !important;
+    line-height: 1.38 !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .safe-card {
+    width: calc(100% - 12px);
+    padding: 14px !important;
+  }
+
+  .safe-pocket {
+    max-width: 198px;
+    font-size: 0.92rem !important;
+  }
+
+  .safe-amount {
+    font-size: clamp(2.28rem, 10.8vw, 2.95rem) !important;
+  }
+
+  .safe-status-chip {
+    max-width: 222px !important;
+    font-size: 0.86rem !important;
+  }
+
+  .safe-subtext {
+    max-width: 250px;
+    font-size: 0.86rem !important;
+  }
+
+  .safe-card-footer {
+    max-width: 220px;
+    padding-right: 96px !important;
+    font-size: 0.74rem !important;
+  }
+
+  .safe-mascot-wrap img {
+    width: 80px !important;
+  }
+
+  .leak-insight-card h2 {
+    font-size: clamp(1.55rem, 7.4vw, 1.92rem) !important;
+  }
+
+  .leak-subtitle {
+    max-width: 230px;
+    font-size: 0.9rem !important;
+  }
+}

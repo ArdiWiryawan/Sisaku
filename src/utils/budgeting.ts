@@ -39,12 +39,12 @@ export function getStatusMessage(status: BudgetStatus): string {
     return "Uang saku kritis! Hemat dulu ya.";
   }
 
-  return "Selesai. Saatnya mulai pocket baru.";
+  return "Selesai. Saatnya mulai rencana uang baru.";
 }
 
 function getPaceMessage(paceDifference: number): string {
   if (paceDifference <= 0) {
-    return "Ritmemu masih lebih pelan dari waktu.";
+    return "Laju pengeluaranmu masih lebih pelan dari waktu.";
   }
 
   if (paceDifference <= 10) {
@@ -60,11 +60,11 @@ function getPaceMessage(paceDifference: number): string {
 
 function getRecoveryMessage(summary: Omit<PocketSummary, "status" | "statusMessage" | "paceMessage" | "recoveryMessage">): string | null {
   if (summary.remainingMoney <= 0) {
-    return `Pocket ini sudah lewat ${formatRupiahAbs(summary.remainingMoney)}. Tidak apa-apa, lanjut dari hari ini dan prioritaskan kebutuhan utama dulu.`;
+    return `Rencana ini sudah lewat ${formatRupiahAbs(summary.remainingMoney)}. Tidak apa-apa, lanjut dari hari ini dan prioritaskan kebutuhan utama dulu.`;
   }
 
   if (summary.remainingDays <= 0) {
-    return "Periode pocket ini sudah selesai. Buat pocket baru untuk mulai periode belanja berikutnya.";
+    return "Periode rencana ini sudah selesai. Buat rencana baru untuk mulai periode belanja berikutnya.";
   }
 
   const dailyOverspend = summary.spentToday - summary.initialSafePerDay;

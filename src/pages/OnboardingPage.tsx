@@ -29,7 +29,7 @@ export function OnboardingPage({ onCreatePocket }: OnboardingPageProps) {
       </section>
 
       <section className="card onboarding-form-card" aria-labelledby="onboarding-title">
-        <p className="eyebrow">Mulai dari satu pocket</p>
+        <p className="eyebrow">Mulai dari satu rencana</p>
         <h2 id="onboarding-title">Uang ini perlu bertahan sampai kapan?</h2>
         <PocketForm submitLabel="Hitung Batas Aman" onSubmit={onCreatePocket} />
       </section>

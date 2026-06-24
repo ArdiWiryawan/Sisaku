@@ -1,4 +1,4 @@
-import { Bell, Download, Palette, RotateCcw, ShieldCheck, Smartphone, Upload } from "lucide-react";
+import { Bell, Download, Palette, RotateCcw, ShieldCheck, Smartphone, Upload, User } from "lucide-react";
 import { useRef } from "react";
 import { APP_VERSION } from "../data/defaults";
 import type { AppSettings, Category, Expense, Income, Pocket } from "../types";
@@ -53,6 +53,29 @@ export function SettingsPage({
         <section className="card settings-card">
           <div className="card-header-row">
             <div>
+              <p className="eyebrow">Profil</p>
+              <h2>Identitas kamu</h2>
+            </div>
+            <div className="icon-bubble primary">
+              <User size={20} aria-hidden="true" />
+            </div>
+          </div>
+          <div className="field" style={{ marginTop: "12px" }}>
+            <label htmlFor="user-name-input">Nama Pengguna</label>
+            <input
+              id="user-name-input"
+              type="text"
+              value={settings.userName ?? ""}
+              placeholder="Masukkan nama kamu..."
+              maxLength={30}
+              onChange={(event) => onUpdateSettings({ userName: event.target.value })}
+            />
+          </div>
+        </section>
+
+        <section className="card settings-card">
+          <div className="card-header-row">
+            <div>
               <p className="eyebrow">Tema</p>
               <h2>Tampilan aplikasi</h2>
             </div>
@@ -98,7 +121,7 @@ export function SettingsPage({
             </button>
             <button className="btn btn-secondary" type="button" onClick={onExportCSV}>
               <Download size={16} aria-hidden="true" />
-              Export CSV
+              Unduh CSV
             </button>
           </div>
           <input

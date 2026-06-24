@@ -41,7 +41,7 @@ export function HomePage({
   categories,
   pockets,
   quickAddTemplates,
-  userName = "Dika Pratama",
+  userName = "Pejuang Hemat",
   onSetActivePocket,
   onAddExpense,
   onAddIncome,
@@ -57,7 +57,7 @@ export function HomePage({
     return (
       <div className="page narrow-page">
         <EmptyState
-          title="Belum ada pocket"
+          title="Belum ada rencana uang"
           body="Buat rencana uang dulu. Setelah itu SisaKu akan hitung batas aman yang bisa kamu pakai setiap hari."
           actionLabel="+ Buat rencana"
           onAction={onCreatePocket}
@@ -70,27 +70,26 @@ export function HomePage({
   const activeIncomes = incomes.filter((income) => income.pocketId === activePocket.id && !income.deletedAt);
   const summary = calculatePocketSummary(activePocket, expenses, incomes);
   const categoryById = new Map(categories.map((category) => [category.id, category.name]));
+  const displayName = userName && userName.trim() !== "" ? userName : "Pejuang Hemat";
   const recentEntries = [
     ...activeExpenses.map((expense) => ({ type: "expense" as const, date: expense.date, createdAt: expense.createdAt, item: expense })),
     ...activeIncomes.map((income) => ({ type: "income" as const, date: income.date, createdAt: income.createdAt, item: income })),
   ].sort((a, b) => `${b.date}${b.createdAt}`.localeCompare(`${a.date}${a.createdAt}`)).slice(0, 5);
   const gameStats = getGamificationStats(expenses.filter(e => !e.deletedAt), categories, summary, pockets, activePocket);
 
-  // Dynamic values for the daily mission progress
   const missionTarget = Math.max(summary.todayAllowance, summary.initialSafePerDay);
   const missionProgressPercent = missionTarget > 0 ? Math.min(100, Math.round((summary.spentToday / missionTarget) * 100)) : 0;
   const isMissionCompleted = summary.spentToday <= missionTarget;
 
   return (
     <div className="page dashboard-page">
-      {/* 1. Mockup Profile Header (Visible on Mobile) */}
       <header className="mobile-only-header">
         <div className="mobile-header-profile">
           <div className="mobile-avatar" aria-hidden="true">
-            {userName.charAt(0)}
+            {displayName.charAt(0)}
           </div>
           <div>
-            <p className="mobile-greetings-eyebrow">Haiii, {userName.split(" ")[0]}! 👋</p>
+            <p className="mobile-greetings-eyebrow">Hai, {displayName.split(" ")[0]}!</p>
           </div>
         </div>
         <div className="mobile-header-actions">
@@ -107,15 +106,14 @@ export function HomePage({
             className="mobile-notification-bell"
             type="button"
             aria-label="Notifikasi"
-            onClick={() => alert("🔔 Kiko: Semua pemberitahuan budget terupdate otomatis di sini!")}
+            onClick={() => alert("Kiko: Semua pemberitahuan batas aman akan muncul di sini.")}
           >
             <Bell size={20} aria-hidden="true" />
           </button>
         </div>
       </header>
 
-      {/* 2. Mockup Active Pocket Selector */}
-      <section className="mobile-pocket-selector" aria-label="Pemilih pocket aktif">
+      <section className="mobile-pocket-selector" aria-label="Pemilih rencana aktif">
         <span className="pocket-sel-label">Rencana aktif</span>
         <div className="pocket-sel-pill">
           <Wallet size={14} className="pocket-sel-icon" aria-hidden="true" />
@@ -123,7 +121,7 @@ export function HomePage({
             value={activePocket.id}
             onChange={(e) => onSetActivePocket(e.target.value)}
             className="pocket-sel-select"
-            aria-label="Pilih pocket aktif"
+            aria-label="Pilih rencana aktif"
           >
             {pockets.map((p) => (
               <option key={p.id} value={p.id}>
@@ -131,14 +129,13 @@ export function HomePage({
               </option>
             ))}
           </select>
-          <span className="pocket-sel-arrow" aria-hidden="true">▾</span>
+          <span className="pocket-sel-arrow" aria-hidden="true">v</span>
         </div>
       </section>
 
-      {/* Desktop traditional header */}
       <section className="page-header desktop-only-header">
         <div>
-          <p className="eyebrow">Hai, pejuang hemat</p>
+          <p className="eyebrow">Hai, {displayName}</p>
           <h1>Jaga uang saku bareng Kiko.</h1>
         </div>
         <button className="btn btn-primary" type="button" onClick={onAddExpense}>
