@@ -104,9 +104,9 @@ export function HistoryPage({ expenses, pockets, categories, onAddExpense, onEdi
         </div>
         <div className="filter-row">
           <label>
-            <span>Pocket</span>
+            <span>Rencana</span>
             <select value={pocketFilter} onChange={(event) => setPocketFilter(event.target.value)}>
-              <option value="all">Semua pocket</option>
+              <option value="all">Semua rencana</option>
               {pockets.map((pocket) => (
                 <option key={pocket.id} value={pocket.id}>
                   {pocket.name}
@@ -139,7 +139,7 @@ export function HistoryPage({ expenses, pockets, categories, onAddExpense, onEdi
                     key={expense.id}
                     expense={expense}
                     categoryName={categoryById.get(expense.categoryId) ?? "Lainnya"}
-                    pocketName={pocketById.get(expense.pocketId) ?? "Pocket terhapus"}
+                    pocketName={pocketById.get(expense.pocketId) ?? "Rencana terhapus"}
                     onEdit={() => onEditExpense(expense)}
                     onDelete={() => onDeleteExpense(expense)}
                   />
@@ -151,7 +151,7 @@ export function HistoryPage({ expenses, pockets, categories, onAddExpense, onEdi
       ) : (
         <EmptyState
           title={expenses.length ? "Belum ketemu catatan yang cocok" : "Belum ada pengeluaran"}
-          body={expenses.length ? "Coba longgarkan filter tanggal, pocket, atau kategori." : "Catat transaksi pertama supaya SisaKu bisa membaca pola belanjamu."}
+          body={expenses.length ? "Coba longgarkan filter tanggal, rencana, atau kategori." : "Catat transaksi pertama supaya SisaKu bisa membaca pola belanjamu."}
           actionLabel={expenses.length ? "Reset filter" : "Catat sekarang"}
           onAction={expenses.length ? () => { setDateFilter("all"); setPocketFilter("all"); setCategoryFilter("all"); } : onAddExpense}
         />
@@ -160,7 +160,7 @@ export function HistoryPage({ expenses, pockets, categories, onAddExpense, onEdi
       {/* Ringkasan spending box with Kiko at the bottom */}
       <section className="history-summary-box">
         <div className="history-summary-mascot" aria-hidden="true">
-          🐿️
+          <img src="/assets/kiko-mascot.png" alt="" />
         </div>
         <div className="history-summary-content">
           <h3>Ringkasan Belanja</h3>

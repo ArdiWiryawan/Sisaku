@@ -5,7 +5,7 @@ const navItems = [
   { id: "home", label: "Home", icon: Home },
   { id: "pockets", label: "Rencana", icon: WalletCards },
   { id: "history", label: "Riwayat", icon: History },
-  { id: "settings", label: "Saya", icon: UserRound },
+  { id: "settings", label: "Atur", icon: UserRound },
 ] satisfies { id: AppTab; label: string; icon: typeof Home }[];
 
 type BottomNavProps = {
